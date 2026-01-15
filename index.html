@@ -1,0 +1,1047 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Holiday Calendar - Multi-Country View</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+            --color-de: #AEC6E4; /* Medium Blue */
+            --color-pl: #FFB3BA; /* Light Red/Pink */
+            --color-es: #FFECB3; /* Light Gold/Yellow */
+                       --color-gb: #B3D9FF; /* Light Sky Blue */
+            --color-cn: #FFB3FF; /* Light Magenta */
+            --color-it: #B3FFD9; /* Light Mint Green */
+            --color-fr: #D9B3FF; /* Light Violet */
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e8eef5 100%);
+            min-height: 100vh;
+        }
+
+        .app-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #64748b;
+            font-size: 1rem;
+        }
+
+        .controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 25px;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .select-wrapper {
+            position: relative;
+        }
+
+        select {
+            padding: 14px 50px 14px 20px;  /* увеличьте padding */
+            min-height: 45px;              /* минимальная высота */
+            min-width: 100px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 1rem;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            appearance: none;
+            font-weight: 500;
+            text-align: center;
+        }
+
+        select:hover {
+            border-color: #cbd5e1;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .select-wrapper::after {
+            content: '▼';
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            pointer-events: none;
+            color: #64748b;
+            font-size: 0.9rem;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #475569;
+            border: 2px solid #e2e8f0;
+        }
+
+        .country-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .chip:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .chip-close {
+            background: rgba(0, 0, 0, 0.1);
+            border: none;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s ease;
+        }
+
+        .chip-close:hover {
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        .calendar-container {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .view-toggle {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .month-block {
+            background: #fafafa;
+            border-radius: 12px;
+            padding: 15px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .month-header {
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #334155;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        .weekdays {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 4px;
+            margin-bottom: 4px;
+        }
+
+        .weekday {
+            text-align: center;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #64748b;
+            padding: 5px;
+        }
+
+        .days-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 4px;
+        }
+
+        .day-cell {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            position: relative;
+            border: 2px solid transparent;
+            background: white;
+        }
+
+        .day-cell:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+            z-index: 10;
+        }
+
+        .day-cell.empty {
+            background: transparent;
+            cursor: default;
+        }
+
+        .day-cell.empty:hover {
+            transform: none;
+            box-shadow: none;
+        }
+
+        .day-cell.has-holiday {
+            font-weight: 600;
+        }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            animation: fadeIn 0.3s ease;
+            padding: 20px;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .modal {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            max-width: 500px;
+            width: 100%;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+    imation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(20px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1e293b;
+        }
+
+        .modal-close {
+            background: #f1f5f9;
+            border: none;
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 1.2rem;
+            color: #64748b;
+            transition: all 0.2s ease;
+        }
+
+        .modal-close:hover {
+            background: #e2e8f0;
+            color: #1e293b;
+        }
+
+        .holiday-item {
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 10px;
+            border: 2px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .holiday-name {
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+        }
+
+        .holiday-local {
+            font-size: 0.9rem;
+            color: #64748b;
+        }
+
+        .list-view-container {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .search-box {
+            width: 100%;
+            padding: 12px 20px;
+            font-size: 1rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .search-box:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .list-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            border-bottom: 1px solid #f1f5f9;
+            transition: background-color 0.2s ease;
+        }
+
+        .list-item:last-child {
+            border-bottom: none;
+        }
+
+        .list-item:hover {
+            background-color: #f8fafc;
+        }
+
+        .list-item-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .list-item-date {
+            font-weight: 500;
+            color: #475569;
+        }
+
+        .list-item-country {
+            font-size: 0.9rem;
+            color: #64748b;
+        }
+
+        .country-dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            padding: 10px;
+            z-index: 100;
+            width: 250px;
+            border: 1px solid #e2e8f0;
+            animation: fadeIn 0.2s ease;
+        }
+
+        .country-dropdown-header {
+            display: flex;
+            justify-content: space-between;
+            padding: 5px 10px;
+            margin-bottom: 5px;
+        }
+
+        .country-dropdown-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        .country-dropdown-item:hover {
+            background-color: #f8fafc;
+        }
+
+        .country-dropdown-item input {
+            margin-right: 10px;
+        }
+
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useMemo, useCallback, useEffect } = React;
+
+        // Localization
+        const translations = {
+            en: {
+                title: 'Holiday Calendar',
+                subtitle: 'Explore public holidays across 8 countries',
+                selectYear: 'Select year',
+                selectCountries: 'Select Countries',
+                selectAll: '✓ Select All',
+                clear: '✗ Clear',
+                calendarView: 'Calendar View',
+                listView: 'List View',
+                searchPlaceholder: 'Search holidays...',
+                close: 'Close',
+                months: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+                weekdays: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+                countryNames: {
+                    'DE': 'Germany',
+                    'PL': 'Poland',
+                    'ES': 'Spain',
+                                       'GB': 'United Kingdom',
+                    'CN': 'China',
+                    'IT': 'Italy',
+                    'FR': 'France'
+                }
+            },
+            ru: {
+                title: 'Календарь Праздников',
+                subtitle: 'Исследуйте государственные праздники в 8 странах',
+                selectYear: 'Выберите год',
+                selectCountries: 'Выбрать страны',
+                selectAll: '✓ Выбрать все',
+                clear: '✗ Очистить',
+                calendarView: 'Календарь',
+                listView: 'Список',
+                searchPlaceholder: 'Поиск праздников...',
+                close: 'Закрыть',
+                months: ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'],
+                weekdays: ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'],
+                countryNames: {
+                    'DE': 'Германия',
+                    'PL': 'Польша',
+                    'ES': 'Испания',
+                  
+                    'GB': 'Великобритания',
+                    'CN': 'Китай',
+                    'IT': 'Италия',
+                    'FR': 'Франция'
+                }
+            }
+        };
+
+        // Country configuration
+        const getCountries = (lang) => [
+            { code: 'DE', name: translations[lang].countryNames['DE'], localName: 'Deutschland', color: '#0077B6' },
+            { code: 'PL', name: translations[lang].countryNames['PL'], localName: 'Polska', color: '#FF0000' },
+            { code: 'ES', name: translations[lang].countryNames['ES'], localName: 'España', color: '#FFC300' },            { code: 'GB', name: translations[lang].countryNames['GB'], localName: 'United Kingdom', color: '#8A2BE2' },
+            { code: 'CN', name: translations[lang].countryNames['CN'], localName: '中国', color: '#FF4500' },
+            { code: 'IT', name: translations[lang].countryNames['IT'], localName: 'Italia', color: '#008000' },
+            { code: 'FR', name: translations[lang].countryNames['FR'], localName: 'France', color: '#4169E1' }
+        ];
+
+        // Years for the dropdown
+        const YEARS = Array.from({ length: 2035 - 2023 + 1 }, (_, i) => 2023 + i);
+
+        // --- Holiday Data Generation ---
+        const calculateEaster = (year) => {
+            const a = year % 19;
+            const b = Math.floor(year / 100);
+            const c = year % 100;
+            const d = Math.floor(b / 4);
+            const e = b % 4;
+            const f = Math.floor((b + 8) / 25);
+            const g = Math.floor((b - f + 1) / 3);
+            const h = (19 * a + b - d - g + 15) % 30;
+            const i = Math.floor(c / 4);
+            const k = c % 4;
+            const l = (32 + 2 * e + 2 * i - h - k) % 7;
+            const m = Math.floor((a + 11 * h + 22 * l) / 451);
+            const month = Math.floor((h + l - 7 * m + 114) / 31);
+            const day = ((h + l - 7 * m + 114) % 31) + 1;
+            return new Date(year, month - 1, day);
+        };
+
+        const generateHolidays = (year) => {
+            const easter = calculateEaster(year);
+            const holidays = [];
+
+            const addHoliday = (countryCode, name, localName, month, day) => {
+                holidays.push({ countryCode, name, localName, date: `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}` });
+            };
+
+            const addRelativeHoliday = (countryCode, name, localName, baseDate, daysOffset) => {
+                const date = new Date(baseDate);
+                date.setDate(date.getDate() + daysOffset);
+                addHoliday(countryCode, name, localName, date.getMonth() + 1, date.getDate());
+            };
+
+            // Fixed holidays
+            // Fixed holidays
+           // DE, PL, ES, IT, FR, GB\n            addHoliday('DE', 'New Year\'s Day', 'Neujahr', 1, 1);
+            addHoliday('PL', 'New Year\'s Day', 'Nowy Rok', 1, 1);
+            addHoliday('ES', 'New Year\'s Day', 'Año Nuevo', 1, 1);
+                       addHoliday('IT', 'New Year\'s Day', 'Capodanno', 1, 1);
+            addHoliday('FR', 'New Year\'s Day', 'Jour de l\'an', 1, 1);
+            addHoliday('GB', 'New Year\'s Day', 'New Year\'s Day', 1, 1);
+            addHoliday('CN', 'New Year\'s Day', '元旦', 1, 1);
+
+            // DE, PL, IT, ES
+            addHoliday('DE', 'Epiphany', 'Heilige Drei Könige', 1, 6);
+            addHoliday('PL', 'Epiphany', 'Trzech Króli', 1, 6);
+            addHoliday('ES', 'Epiphany', 'Día de los Reyes Magos', 1, 6);
+            addHoliday('IT', 'Epiphany', 'Epifania', 1, 6);
+
+            // DE, PL, ES, FR
+            addHoliday('DE', 'Labour Day', 'Tag der Arbeit', 5, 1);
+            addHoliday('PL', 'Labour Day', 'Święto Pracy', 5, 1);
+            addHoliday('ES', 'Labour Day', 'Día del Trabajador', 5, 1);
+            addHoliday('FR', 'Labour Day', 'Fête du Travail', 5, 1);
+
+            addHoliday('PL', 'Constitution Day', 'Święto Konstytucji 3 Maja', 5, 3);
+            addHoliday('FR', 'Victory in Europe Day', 'Victoire 1945', 5, 8);
+            addHoliday('FR', 'Bastille Day', 'Fête Nationale', 7, 14);
+
+          // DE, IT, FR\n
+            addHoliday('DE', 'Assumption of Mary', 'Mariä Himmelfahrt', 8, 15);
+          
+            addHoliday('IT', 'Assumption of Mary', 'Assunzione di Maria', 8, 15);
+            addHoliday('FR', 'Assumption of Mary', 'Assomption', 8, 15);
+
+            // IT specific fixed holidays
+            addHoliday('IT', 'Liberation Day', 'Festa della Liberazione', 4, 25);
+            addHoliday('IT', 'Republic Day', 'Festa della Repubblica', 6, 2);
+
+            addHoliday('PL', 'Armed Forces Day', 'Święto Wojska Polskiego', 8, 15);
+            addHoliday('DE', 'German Unity Day', 'Tag der Deutschen Einheit', 10, 3);
+            addHoliday('ES', 'Hispanic Day', 'Fiesta Nacional de España', 10, 12);
+           
+          // DE, PL, IT\n, FR
+            addHoliday('DE', 'All Saints\' Day', 'Allerheiligen', 11, 1);
+            addHoliday('PL', 'All Saints\' Day', 'Wszystkich Świętych', 11, 1);
+          
+            addHoliday('IT', 'All Saints\' Day', 'Tutti i Santi', 11, 1);
+            addHoliday('FR', 'All Saints\' Day', 'Toussaint', 11, 1);
+
+            addHoliday('PL', 'Independence Day', 'Narodowe Święto Niepodległości', 11, 11);
+            addHoliday('FR', 'Armistice Day', 'Armistice 1918', 11, 11);
+            addHoliday('ES', 'Constitution Day', 'Día de la Constitución', 12, 6);
+
+            // IT, ES\n         
+            addHoliday('IT', 'Immaculate Conception', 'Immacolata Concezione', 12, 8);
+            addHoliday('ES', 'Immaculate Conception', 'Inmaculada Concepción', 12, 8);
+
+            /// DE, PL, IT, FR\nR, GB
+            addHoliday('DE', 'Christmas Day', '1. Weihnachtstag', 12, 25);
+            addHoliday('PL', 'Christmas Day', 'Boże Narodzenie', 12, 25);
+            addHoliday('ES', 'Christmas Day', 'Navidad', 12, 25);
+                       addHoliday('IT', 'Christmas Day', 'Natale', 12, 25);
+            addHoliday('FR', 'Christmas Day', 'Noël', 12, 25);
+            addHoliday('GB', 'Christmas Day', 'Christmas Day', 12, 25);
+
+           // DE, PL, IT, GB\n            addHoliday('DE', 'St. Stephen\'s Day', '2. Weihnachtstag', 12, 26);
+            addHoliday('PL', 'St. Stephen\'s Day', 'Drugi dzień Świąt', 12, 26);
+          
+            addHoliday('IT', 'St. Stephen\'s Day', 'Santo Stefano', 12, 26);
+            addHoliday('GB', 'Boxing Day', 'Boxing Day', 12, 26);
+
+            // Easter related holidays
+           // Easter Sunday (PL, IT, FR, ES - not a public holiday in DE/GB, but the base for others)\n            addRelativeHoliday('PL', 'Easter Sunday', 'Wielkanoc', easter, 0);
+            addRelativeHoliday('IT', 'Easter Sunday', 'Pasqua', easter, 0);
+          
+            addRelativeHoliday('FR', 'Easter Sunday', 'Pâques', easter, 0);
+            addRelativeHoliday('ES', 'Easter Sunday', 'Domingo de Resurrección', easter, 0);
+
+            // DE, PL, ES, GB, IT, FR
+            addRelativeHoliday('DE', 'Good Friday', 'Karfreitag', easter, -2);
+            addRelativeHoliday('ES', 'Good Friday', 'Viernes Santo', easter, -2);
+            addRelativeHoliday('GB', 'Good Friday', 'Good Friday', easter, -2);
+
+            // DE, PL, ES, GB, IT, FR
+            addRelativeHoliday('DE', 'Easter Monday', 'Ostermontag', easter, 1);
+            addRelativeHoliday('PL', 'Easter Monday', 'Poniedziałek Wielkanocny', easter, 1);
+            addRelativeHoliday('ES', 'Easter Monday', 'Lunes de Pascua', easter, 1);
+            addRelativeHoliday('GB', 'Easter Monday', 'Easter Monday', easter, 1);
+            addRelativeHoliday('IT', 'Easter Monday', 'Lunedì dell\'Angelo', easter, 1);
+            addRelativeHoliday('FR', 'Easter Monday', 'Lundi de Pâques', easter, 1);
+
+            // DE, FR
+            addRelativeHoliday('DE', 'Ascension Day', 'Christi Himmelfahrt', easter, 39);
+            addRelativeHoliday('FR', 'Ascension Day', 'Ascension', easter, 39);
+
+            // DE, PL, FR
+            addRelativeHoliday('DE', 'Whit Monday', 'Pfingstmontag', easter, 50);
+            addRelativeHoliday('PL', 'Pentecost', 'Zesłanie Ducha Świętego', easter, 49);
+                       addRelativeHoliday('FR', 'Whit Monday', 'Lundi de Pentecôte', easter, 50);
+
+            // DE, PL
+            addRelativeHoliday('DE', 'Corpus Christi', 'Fronleichnam', easter, 60);
+            addRelativeHoliday('PL', 'Corpus Christi', 'Boże Ciało', easter, 60);
+
+
+            // FR - Good Friday
+            addRelativeHoliday('FR', 'Good Friday', 'Vendredi Saint', easter, -2);
+            // IT - Good Friday  
+            addRelativeHoliday('IT', 'Good Friday', 'Venerdì Santo', easter, -2);
+            // IT - Labour Day (May 1st)
+            addHoliday('IT', 'Labour Day', 'Festa del Lavoro', 5, 1);
+            // ES - Assumption of Mary
+            addHoliday('ES', 'Assumption of Mary', 'Asunción de María', 8, 15);
+            // ES - All Saints' Day
+            addHoliday('ES', 'All Saints\' Day', 'Día de Todos los Santos', 11, 1);
+            // PL - Good Friday
+            addRelativeHoliday('PL', 'Good Friday', 'Piątek Wielkanocny', easter, -2);
+            // PL - Whit Sunday
+            addRelativeHoliday('PL', 'Whit Sunday', 'Zesłanie Ducha Świętego', easter, 49);
+            // PL - Christmas Eve
+            addHoliday('PL', 'Christmas Eve', 'Wigilia Bożego Narodzenia', 12, 24);
+                                
+                     
+                                
+                     
+
+            // UK specific (England and Wales) - Variable Bank Holidays
+            const ukVariableHolidays = {
+                2026: [{ m: 5, d: 4, name: 'Early May Bank Holiday' }, { m: 5, d: 25, name: 'Spring Bank Holiday' }, { m: 8, d: 31, name: 'Summer Bank Holiday' }],
+                2027: [{ m: 5, d: 3, name: 'Early May Bank Holiday' }, { m: 5, d: 31, name: 'Spring Bank Holiday' }, { m: 8, d: 30, name: 'Summer Bank Holiday' }],
+                2028: [{ m: 5, d: 1, name: 'Early May Bank Holiday' }, { m: 5, d: 29, name: 'Spring Bank Holiday' }, { m: 8, d: 28, name: 'Summer Bank Holiday' }],
+                2029: [{ m: 5, d: 7, name: 'Early May Bank Holiday' }, { m: 5, d: 28, name: 'Spring Bank Holiday' }, { m: 8, d: 27, name: 'Summer Bank Holiday' }],
+                2030: [{ m: 5, d: 6, name: 'Early May Bank Holiday' }, { m: 5, d: 27, name: 'Spring Bank Holiday' }, { m: 8, d: 26, name: 'Summer Bank Holiday' }],
+                2031: [{ m: 5, d: 5, name: 'Early May Bank Holiday' }, { m: 5, d: 26, name: 'Spring Bank Holiday' }, { m: 8, d: 25, name: 'Summer Bank Holiday' }],
+                2032: [{ m: 5, d: 3, name: 'Early May Bank Holiday' }, { m: 5, d: 31, name: 'Spring Bank Holiday' }, { m: 8, d: 30, name: 'Summer Bank Holiday' }],
+                2033: [{ m: 5, d: 2, name: 'Early May Bank Holiday' }, { m: 5, d: 30, name: 'Spring Bank Holiday' }, { m: 8, d: 29, name: 'Summer Bank Holiday' }],
+                2034: [{ m: 5, d: 1, name: 'Early May Bank Holiday' }, { m: 5, d: 29, name: 'Spring Bank Holiday' }, { m: 8, d: 28, name: 'Summer Bank Holiday' }],
+                2035: [{ m: 5, d: 7, name: 'Early May Bank Holiday' }, { m: 5, d: 28, name: 'Spring Bank Holiday' }, { m: 8, d: 27, name: 'Summer Bank Holiday' }],
+            };
+            if (ukVariableHolidays[year]) {
+                ukVariableHolidays[year].forEach(h => addHoliday('GB', h.name, h.name, h.m, h.d));
+            }
+
+            // China specific (Lunar-based holidays - precise Gregorian dates 2026-2035)
+            const chinaLunarHolidays = {
+                2026: { cny: '02-17', qmf: '04-05', dbf: '06-19', maf: '09-25' },
+                2027: { cny: '02-06', qmf: '04-05', dbf: '06-09', maf: '09-15' },
+                2028: { cny: '01-26', qmf: '04-04', dbf: '05-28', maf: '10-03' },
+                2029: { cny: '02-13', qmf: '04-05', dbf: '06-16', maf: '09-22' },
+                2030: { cny: '02-03', qmf: '04-05', dbf: '06-05', maf: '09-12' },
+                2031: { cny: '01-23', qmf: '04-05', dbf: '06-24', maf: '10-01' },
+                2032: { cny: '02-11', qmf: '04-04', dbf: '06-12', maf: '09-19' },
+                2033: { cny: '01-31', qmf: '04-05', dbf: '06-01', maf: '09-08' },
+                2034: { cny: '02-19', qmf: '04-05', dbf: '06-20', maf: '09-27' },
+                2035: { cny: '02-08', qmf: '04-05', dbf: '06-10', maf: '09-16' },
+            };
+
+            if (chinaLunarHolidays[year]) {
+                const h = chinaLunarHolidays[year];
+                const parseDate = (dateStr) => dateStr.split('-').map(Number);
+
+                let [m_cny, d_cny] = parseDate(h.cny);
+                addHoliday('CN', 'Chinese New Year', '春节', m_cny, d_cny);
+
+                let [m_qmf, d_qmf] = parseDate(h.qmf);
+                addHoliday('CN', 'Qingming Festival', '清明节', m_qmf, d_qmf);
+
+                let [m_dbf, d_dbf] = parseDate(h.dbf);
+                addHoliday('CN', 'Dragon Boat Festival', '端午节', m_dbf, d_dbf);
+
+                let [m_maf, d_maf] = parseDate(h.maf);
+                addHoliday('CN', 'Mid-Autumn Festival', '中秋节', m_maf, d_maf);
+            }
+            addHoliday('CN', 'National Day', '国庆节', 10, 1);
+
+            return holidays;
+        };
+
+        const ALL_HOLIDAYS = YEARS.flatMap(generateHolidays);
+
+        // Main App Component
+        function HolidayCalendarApp() {
+            const [language, setLanguage] = useState('en'); // 'en' or 'ru'
+            const t = translations[language];
+            const COUNTRIES = getCountries(language);
+
+            const [selectedYear, setSelectedYear] = useState(2026); // Установлен 2026 год по умолчанию по запросу пользователя
+            const [selectedCountries, setSelectedCountries] = useState([]); // Убран выбор стран по умолчанию
+            const [viewMode, setViewMode] = useState('calendar'); // 'calendar' or 'list'
+            const [selectedDay, setSelectedDay] = useState(null);
+            const [searchQuery, setSearchQuery] = useState('');
+            const [showCountryDropdown, setShowCountryDropdown] = useState(false);
+
+            // Filter holidays by year and selected countries
+            const filteredHolidays = useMemo(() => {
+                return ALL_HOLIDAYS.filter(h => {
+                    const holidayYear = parseInt(h.date.split('-')[0]);
+                    return holidayYear === selectedYear && selectedCountries.includes(h.countryCode);
+                });
+            }, [selectedYear, selectedCountries]);
+
+            // Group holidays by date for calendar view
+            const holidaysByDate = useMemo(() => {
+                return filteredHolidays.reduce((acc, holiday) => {
+                    if (!acc[holiday.date]) {
+                        acc[holiday.date] = [];
+                    }
+                    acc[holiday.date].push(holiday);
+                    return acc;
+                }, {});
+            }, [filteredHolidays]);
+
+            const toggleCountry = (countryCode) => {
+                setSelectedCountries(prev =>
+                    prev.includes(countryCode)
+                        ? prev.filter(c => c !== countryCode)
+                        : [...prev, countryCode]
+                );
+            };
+
+            const selectAllCountries = () => {
+                setSelectedCountries(COUNTRIES.map(c => c.code));
+            };
+
+            const deselectAllCountries = () => {
+                setSelectedCountries([]);
+            };
+
+            return (
+                <div className="app-container">
+                    <header className="header">
+                        <h1>{t.title}</h1>
+                        <p>{t.subtitle}</p>
+                        <div style={{ marginTop: '10px', display: 'flex', gap: '10px', justifyContent: 'center' }}>
+                            <button onClick={() => setLanguage('ru')} className={`btn ${language === 'ru' ? 'btn-primary' : 'btn-secondary'}`}>Русский</button>
+                            <button onClick={() => setLanguage('en')} className={`btn ${language === 'en' ? 'btn-primary' : 'btn-secondary'}`}>English</button>
+                        </div>
+                    </header>
+
+                    <div className="controls">
+                        <div className="select-wrapper">
+                            <select value={selectedYear} onChange={e => setSelectedYear(parseInt(e.target.value))} aria-label={t.selectYear}>
+                                {YEARS.map(year => <option key={year} value={year}>{year}</option>)}
+                            </select>
+                        </div>
+                        <div className="relative inline-block text-left">
+                            <button
+                                type="button"
+                                className="btn btn-primary"
+                                onClick={() => setShowCountryDropdown(!showCountryDropdown)}
+                            >
+                                {t.selectCountries}
+                            </button>
+                            {showCountryDropdown && (
+                                <div className="country-dropdown">
+                                    <div className="country-dropdown-header">
+                                        <button className="btn btn-secondary" onClick={selectAllCountries}>{t.selectAll}</button>
+                                        <button className="btn btn-secondary" onClick={deselectAllCountries}>{t.clear}</button>
+                                    </div>
+                                    {COUNTRIES.map(country => (
+                                        <div key={country.code} className="country-dropdown-item" onClick={() => toggleCountry(country.code)}>
+                                            <input type="checkbox" readOnly checked={selectedCountries.includes(country.code)} />
+                                            <span style={{ color: country.color, fontWeight: 'bold' }}>■</span>
+                                            <span>{country.name}</span>
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
+                        </div>
+                    </div>
+
+                    <div className="country-chips">
+                        {selectedCountries.map(code => {
+                            const country = COUNTRIES.find(c => c.code === code);
+                            return (
+                                <div key={code} className="chip" style={{ backgroundColor: country.color, color: 'white' }}>
+                                    <span>{country.name}</span>
+                                    <button className="chip-close" onClick={() => toggleCountry(code)}>×</button>
+                                </div>
+                            );
+                        })}
+                    </div>
+
+                    <div className="calendar-container">
+                        <div className="view-toggle">
+                            <button
+                                className={`btn ${viewMode === 'calendar' ? 'btn-primary' : 'btn-secondary'}`}
+                                onClick={() => setViewMode('calendar')}
+                            >
+                                {t.calendarView}
+                            </button>
+                            <button
+                                className={`btn ${viewMode === 'list' ? 'btn-primary' : 'btn-secondary'}`}
+                                onClick={() => setViewMode('list')}
+                            >
+                                {t.listView}
+                            </button>
+                        </div>
+
+                        {viewMode === 'calendar' ? (
+                            <CalendarView
+                                year={selectedYear}
+                                holidaysByDate={holidaysByDate}
+                                onDayClick={setSelectedDay}
+                                lang={language}
+                            />
+                        ) : (
+                            <ListView
+                                holidays={filteredHolidays}
+                                searchQuery={searchQuery}
+                                onSearchChange={setSearchQuery}
+                                lang={language}
+                            />
+                        )}
+                    </div>
+
+                    {selectedDay && (
+                        <DayModal
+                            date={selectedDay}
+                            holidays={holidaysByDate[selectedDay] || []}
+                            onClose={() => setSelectedDay(null)}
+                            lang={language}
+                        />
+                    )}
+                </div>
+            );
+        }
+
+        // Calendar View Component
+        function CalendarView({ year, holidaysByDate, onDayClick, lang }) {
+            const t = translations[lang];
+            const COUNTRIES = getCountries(lang);
+            const months = t.months;
+            const weekdays = t.weekdays;
+
+            const getCellStyle = (holidays) => {
+                if (!holidays || holidays.length === 0) return {};
+                if (holidays.length === 1) {
+                    const country = COUNTRIES.find(c => c.code === holidays[0].countryCode);
+                    return { backgroundColor: country ? country.color : '#ccc', color: 'white' };
+                }
+                const colors = holidays.map(h => {
+                    const country = COUNTRIES.find(c => c.code === h.countryCode);
+                    return country ? country.color : '#ccc';
+                });
+                const uniqueColors = [...new Set(colors)];
+                const stripeSize = 100 / uniqueColors.length;
+                const gradient = uniqueColors.map((color, index) => 
+                    `${color} ${index * stripeSize}%, ${color} ${(index + 1) * stripeSize}%`
+                ).join(', ');
+                return { background: `linear-gradient(to right, ${gradient})`, color: 'white' };
+            };
+
+            return (
+                <div className="calendar-grid">
+                    {months.map((monthName, monthIndex) => {
+                        const firstDay = new Date(year, monthIndex, 1).getDay();
+                        const daysInMonth = new Date(year, monthIndex + 1, 0).getDate();
+                        const days = Array.from({ length: daysInMonth }, (_, i) => i + 1);
+                        const emptyDays = Array.from({ length: firstDay });
+
+                        return (
+                            <div key={monthIndex} className="month-block">
+                                <div className="month-header">{monthName}</div>
+                                <div className="weekdays">
+                                    {weekdays.map(wd => <div key={wd} className="weekday">{wd}</div>)}
+                                </div>
+                                <div className="days-grid">
+                                    {emptyDays.map((_, i) => <div key={`empty-${i}`} className="day-cell empty"></div>)}
+                                    {days.map(day => {
+                                        const dateStr = `${year}-${String(monthIndex + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                                        const holidays = holidaysByDate[dateStr] || [];
+                                        const hasHoliday = holidays.length > 0;
+                                        const style = getCellStyle(holidays);
+
+                                        return (
+                                            <div
+                                                key={day}
+                                                className={`day-cell ${hasHoliday ? 'has-holiday' : ''}`}
+                                                style={style}
+                                                onClick={() => hasHoliday && onDayClick(dateStr)}
+                                                title={hasHoliday ? holidays.map(h => `${h.name} (${(COUNTRIES.find(c => c.code === h.countryCode) || {}).name || h.countryCode})`).join('\n') : ''}
+                                            >
+                                                {day}
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                            </div>
+                        );
+                    })}
+                </div>
+            );
+        }
+
+        // List View Component
+        function ListView({ holidays, searchQuery, onSearchChange, lang }) {
+            const t = translations[lang];
+            const COUNTRIES = getCountries(lang);
+
+            const filteredHolidays = useMemo(() => {
+                const query = searchQuery.toLowerCase();
+                return holidays.filter(h => {
+                    const country = COUNTRIES.find(c => c.code === h.countryCode);
+                    return h.name.toLowerCase().includes(query) ||
+                           h.localName.toLowerCase().includes(query) ||
+                           (country && country.name.toLowerCase().includes(query));
+                });
+            }, [holidays, searchQuery, COUNTRIES]);
+
+            return (
+                <div className="list-view-container">
+                    <input 
+                        type="text" 
+                        className="search-box" 
+                        placeholder={t.searchPlaceholder} 
+                        value={searchQuery} 
+                        onChange={(e) => onSearchChange(e.target.value)} 
+                    />
+                    <div>
+                        {filteredHolidays.map((holiday, index) => {
+                            const country = COUNTRIES.find(c => c.code === holiday.countryCode);
+                            return (
+                                <div key={index} className="list-item">
+                                    <div className="list-item-info">
+                                        <div className="holiday-name">{holiday.name}</div>
+                                        <div className="list-item-country" style={{ color: country ? country.color : '#ccc' }}>
+                                            {country ? country.name : holiday.countryCode}
+                                        </div>
+                                    </div>
+                                    <div className="list-item-date">{holiday.date}</div>
+                                </div>
+                            );
+                        })}
+                    </div>
+                </div>
+            );
+        }
+
+        // Day Modal Component
+        function DayModal({ date, holidays, onClose, lang }) {
+            const t = translations[lang];
+            const COUNTRIES = getCountries(lang);
+            const dateObj = new Date(date);
+            const month = t.months[dateObj.getMonth()];
+            const day = dateObj.getDate();
+            const year = dateObj.getFullYear();
+
+            return (
+                <div className="modal-overlay" onClick={onClose}>
+                    <div className="modal" onClick={e => e.stopPropagation()}>
+                        <div className="modal-header">
+                            <h2 className="modal-title">{month} {day}, {year}</h2>
+                            <button className="modal-close" onClick={onClose} title={t.close}>×</button>
+                        </div>
+                        <div>
+                            {holidays.map((holiday, index) => {
+                                const country = COUNTRIES.find(c => c.code === holiday.countryCode);
+                                const countryName = country ? country.name : holiday.countryCode;
+                                return (
+                                    <div key={index} className="holiday-item" style={{ borderLeft: `5px solid ${country ? country.color : '#ccc'}` }}>
+                                        <div className="holiday-name">{holiday.name} ({countryName})</div>
+                                        <div className="holiday-local">{holiday.localName}</div>
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<HolidayCalendarApp />);
+
+    </script>
+</body>
+</html>
