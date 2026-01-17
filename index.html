@@ -579,6 +579,9 @@
             addHoliday('GB', 'New Year\'s Day', 'New Year\'s Day', 1, 1);
             addHoliday('CN', 'New Year\'s Day', '元旦', 1, 1);
 
+            // CN - Labour Day
+            addHoliday('CN', 'Labour Day', '劳动节', 5, 1);
+
             // DE, PL, IT, ES
             addHoliday('DE', 'Epiphany', 'Heilige Drei Könige', 1, 6);
             addHoliday('PL', 'Epiphany', 'Trzech Króli', 1, 6);
@@ -605,9 +608,10 @@
             addHoliday('IT', 'Liberation Day', 'Festa della Liberazione', 4, 25);
             addHoliday('IT', 'Republic Day', 'Festa della Repubblica', 6, 2);
 
-            addHoliday('PL', 'Armed Forces Day', 'Święto Wojska Polskiego', 8, 15);
+            addHoliday('PL', 'Assumption of Mary', 'Wniebowzięcie Najświętszej Maryi Panny', 8, 15);
             addHoliday('DE', 'German Unity Day', 'Tag der Deutschen Einheit', 10, 3);
             addHoliday('ES', 'Hispanic Day', 'Fiesta Nacional de España', 10, 12);
+            addHoliday('DE', 'Reformation Day', 'Reformationstag', 10, 31);
            
           // DE, PL, IT\n, FR
             addHoliday('DE', 'All Saints\' Day', 'Allerheiligen', 11, 1);
@@ -645,15 +649,17 @@
             addRelativeHoliday('FR', 'Easter Sunday', 'Pâques', easter, 0);
             addRelativeHoliday('ES', 'Easter Sunday', 'Domingo de Resurrección', easter, 0);
 
+            // ES - Maundy Thursday
+            addRelativeHoliday('ES', 'Maundy Thursday', 'Jueves Santo', easter, -3);
+
             // DE, PL, ES, GB, IT, FR
             addRelativeHoliday('DE', 'Good Friday', 'Karfreitag', easter, -2);
             addRelativeHoliday('ES', 'Good Friday', 'Viernes Santo', easter, -2);
             addRelativeHoliday('GB', 'Good Friday', 'Good Friday', easter, -2);
 
-            // DE, PL, ES, GB, IT, FR
+            // DE, PL, GB, IT, FR
             addRelativeHoliday('DE', 'Easter Monday', 'Ostermontag', easter, 1);
             addRelativeHoliday('PL', 'Easter Monday', 'Poniedziałek Wielkanocny', easter, 1);
-            addRelativeHoliday('ES', 'Easter Monday', 'Lunes de Pascua', easter, 1);
             addRelativeHoliday('GB', 'Easter Monday', 'Easter Monday', easter, 1);
             addRelativeHoliday('IT', 'Easter Monday', 'Lunedì dell\'Angelo', easter, 1);
             addRelativeHoliday('FR', 'Easter Monday', 'Lundi de Pâques', easter, 1);
@@ -672,22 +678,12 @@
             addRelativeHoliday('PL', 'Corpus Christi', 'Boże Ciało', easter, 60);
 
 
-            // FR - Good Friday
-            addRelativeHoliday('FR', 'Good Friday', 'Vendredi Saint', easter, -2);
-            // IT - Good Friday  
-            addRelativeHoliday('IT', 'Good Friday', 'Venerdì Santo', easter, -2);
             // IT - Labour Day (May 1st)
             addHoliday('IT', 'Labour Day', 'Festa del Lavoro', 5, 1);
             // ES - Assumption of Mary
             addHoliday('ES', 'Assumption of Mary', 'Asunción de María', 8, 15);
             // ES - All Saints' Day
             addHoliday('ES', 'All Saints\' Day', 'Día de Todos los Santos', 11, 1);
-            // PL - Good Friday
-            addRelativeHoliday('PL', 'Good Friday', 'Piątek Wielkanocny', easter, -2);
-            // PL - Whit Sunday
-            addRelativeHoliday('PL', 'Whit Sunday', 'Zesłanie Ducha Świętego', easter, 49);
-            // PL - Christmas Eve
-            addHoliday('PL', 'Christmas Eve', 'Wigilia Bożego Narodzenia', 12, 24);
                                 
                      
                                 
