@@ -303,7 +303,7 @@
             max-height: 80vh;
             overflow-y: auto;
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
-    imation: slideUp 0.3s ease;
+            animation: slideUp 0.3s ease;
         }
 
         @keyframes slideUp {
@@ -464,6 +464,417 @@
             margin-right: 10px;
         }
 
+        /* New UX/UI Improvements */
+
+        /* Legend */
+        .legend-container {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .legend-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #334155;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .legend-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 12px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .legend-item:hover {
+            background: #f8fafc;
+            transform: translateX(5px);
+        }
+
+        .legend-color {
+            width: 24px;
+            height: 24px;
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .legend-flag {
+            font-size: 1.5rem;
+        }
+
+        .legend-name {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #475569;
+        }
+
+        /* Statistics Panel */
+        .stats-container {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .stats-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #334155;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .stats-total {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #667eea;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .stats-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .stats-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            border-radius: 8px;
+            background: #f8fafc;
+            transition: all 0.2s ease;
+        }
+
+        .stats-item:hover {
+            background: #f1f5f9;
+            transform: scale(1.02);
+        }
+
+        .stats-country {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .stats-count {
+            font-weight: 600;
+            padding: 4px 12px;
+            border-radius: 12px;
+            background: white;
+            color: #667eea;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #64748b;
+        }
+
+        .empty-state-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            opacity: 0.5;
+        }
+
+        .empty-state-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #334155;
+        }
+
+        .empty-state-text {
+            font-size: 1rem;
+            margin-bottom: 30px;
+        }
+
+        /* Weekend highlighting */
+        .day-cell.weekend {
+            background: #f8fafc;
+        }
+
+        .day-cell.weekend.has-holiday {
+            background: inherit;
+        }
+
+        /* Current day indicator */
+        .day-cell.today {
+            border: 2px solid #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+            }
+            50% {
+                box-shadow: 0 0 0 6px rgba(102, 126, 234, 0.1);
+            }
+        }
+
+        /* Holiday counter in chips */
+        .chip-counter {
+            background: rgba(255, 255, 255, 0.3);
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        /* Dark theme */
+        body.dark-theme {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #e0e0e0;
+        }
+
+        body.dark-theme .header h1 {
+            background: linear-gradient(135deg, #00d4ff 0%, #667eea 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        body.dark-theme .header p {
+            color: #94a3b8;
+        }
+
+        body.dark-theme .calendar-container,
+        body.dark-theme .legend-container,
+        body.dark-theme .stats-container,
+        body.dark-theme .list-view-container {
+            background: #16213e;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        body.dark-theme .month-block {
+            background: #0f1729;
+        }
+
+        body.dark-theme .month-header {
+            color: #e0e0e0;
+            border-bottom-color: #2d3748;
+        }
+
+        body.dark-theme .weekday {
+            color: #94a3b8;
+        }
+
+        body.dark-theme .day-cell {
+            background: #1a2332;
+            color: #e0e0e0;
+        }
+
+        body.dark-theme .day-cell.weekend {
+            background: #0f1729;
+        }
+
+        body.dark-theme .modal {
+            background: #16213e;
+            color: #e0e0e0;
+        }
+
+        body.dark-theme .modal-title {
+            color: #e0e0e0;
+        }
+
+        body.dark-theme .modal-close {
+            background: #0f1729;
+            color: #94a3b8;
+        }
+
+        body.dark-theme .modal-close:hover {
+            background: #1a2332;
+            color: #e0e0e0;
+        }
+
+        body.dark-theme .holiday-item {
+            background: #0f1729;
+            border-color: #2d3748;
+        }
+
+        body.dark-theme .search-box,
+        body.dark-theme select {
+            background: #0f1729;
+            color: #e0e0e0;
+            border-color: #2d3748;
+        }
+
+        body.dark-theme .list-item {
+            border-bottom-color: #2d3748;
+        }
+
+        body.dark-theme .list-item:hover {
+            background-color: #0f1729;
+        }
+
+        body.dark-theme .legend-item:hover,
+        body.dark-theme .stats-item {
+            background: #0f1729;
+        }
+
+        body.dark-theme .stats-item:hover {
+            background: #1a2332;
+        }
+
+        body.dark-theme .stats-count {
+            background: #0f1729;
+        }
+
+        body.dark-theme .empty-state-title {
+            color: #e0e0e0;
+        }
+
+        /* Theme toggle */
+        .theme-toggle {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            z-index: 999;
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.1) rotate(20deg);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Improved animations */
+        .month-block {
+            animation: fadeInUp 0.5s ease;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .calendar-grid .month-block:nth-child(1) { animation-delay: 0.05s; }
+        .calendar-grid .month-block:nth-child(2) { animation-delay: 0.1s; }
+        .calendar-grid .month-block:nth-child(3) { animation-delay: 0.15s; }
+        .calendar-grid .month-block:nth-child(4) { animation-delay: 0.2s; }
+        .calendar-grid .month-block:nth-child(5) { animation-delay: 0.25s; }
+        .calendar-grid .month-block:nth-child(6) { animation-delay: 0.3s; }
+        .calendar-grid .month-block:nth-child(7) { animation-delay: 0.35s; }
+        .calendar-grid .month-block:nth-child(8) { animation-delay: 0.4s; }
+        .calendar-grid .month-block:nth-child(9) { animation-delay: 0.45s; }
+        .calendar-grid .month-block:nth-child(10) { animation-delay: 0.5s; }
+        .calendar-grid .month-block:nth-child(11) { animation-delay: 0.55s; }
+        .calendar-grid .month-block:nth-child(12) { animation-delay: 0.6s; }
+
+        /* Mobile responsiveness */
+        @media (max-width: 768px) {
+            .calendar-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .legend-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .theme-toggle {
+                bottom: 20px;
+                right: 20px;
+                width: 50px;
+                height: 50px;
+            }
+
+            .controls {
+                flex-direction: column;
+            }
+
+            .modal {
+                max-width: 90%;
+            }
+        }
+
+        /* List grouping */
+        .list-group {
+            margin-bottom: 30px;
+        }
+
+        .list-group-header {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #334155;
+            padding: 15px;
+            background: #f8fafc;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        body.dark-theme .list-group-header {
+            background: #0f1729;
+            color: #e0e0e0;
+        }
+
+        .list-group-countries {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .list-group-country-badge {
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            background: white;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        body.dark-theme .list-group-country-badge {
+            background: #1a2332;
+        }
+
     </style>
 </head>
 <body>
@@ -476,7 +887,7 @@
         const translations = {
             en: {
                 title: 'Holiday Calendar',
-                subtitle: 'Explore public holidays across 8 countries',
+                subtitle: 'Explore public holidays across 7 countries',
                 selectYear: 'Select year',
                 selectCountries: 'Select Countries',
                 selectAll: '✓ Select All',
@@ -485,13 +896,19 @@
                 listView: 'List View',
                 searchPlaceholder: 'Search holidays...',
                 close: 'Close',
+                legend: 'Country Legend',
+                statistics: 'Holiday Statistics',
+                totalHolidays: 'Total holidays',
+                days: 'days',
+                emptyStateTitle: 'No countries selected',
+                emptyStateText: 'Please select countries above to view their public holidays',
                 months: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
                 weekdays: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
                 countryNames: {
                     'DE': 'Germany',
                     'PL': 'Poland',
                     'ES': 'Spain',
-                                       'GB': 'United Kingdom',
+                    'GB': 'United Kingdom',
                     'CN': 'China',
                     'IT': 'Italy',
                     'FR': 'France'
@@ -499,7 +916,7 @@
             },
             ru: {
                 title: 'Календарь Праздников',
-                subtitle: 'Исследуйте государственные праздники в 8 странах',
+                subtitle: 'Исследуйте государственные праздники в 7 странах',
                 selectYear: 'Выберите год',
                 selectCountries: 'Выбрать страны',
                 selectAll: '✓ Выбрать все',
@@ -508,13 +925,18 @@
                 listView: 'Список',
                 searchPlaceholder: 'Поиск праздников...',
                 close: 'Закрыть',
+                legend: 'Легенда стран',
+                statistics: 'Статистика праздников',
+                totalHolidays: 'Всего праздников',
+                days: 'дней',
+                emptyStateTitle: 'Страны не выбраны',
+                emptyStateText: 'Пожалуйста, выберите страны выше для просмотра их государственных праздников',
                 months: ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'],
                 weekdays: ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'],
                 countryNames: {
                     'DE': 'Германия',
                     'PL': 'Польша',
                     'ES': 'Испания',
-                  
                     'GB': 'Великобритания',
                     'CN': 'Китай',
                     'IT': 'Италия',
@@ -525,12 +947,13 @@
 
         // Country configuration
         const getCountries = (lang) => [
-            { code: 'DE', name: translations[lang].countryNames['DE'], localName: 'Deutschland', color: '#0077B6' },
-            { code: 'PL', name: translations[lang].countryNames['PL'], localName: 'Polska', color: '#FF0000' },
-            { code: 'ES', name: translations[lang].countryNames['ES'], localName: 'España', color: '#FFC300' },            { code: 'GB', name: translations[lang].countryNames['GB'], localName: 'United Kingdom', color: '#8A2BE2' },
-            { code: 'CN', name: translations[lang].countryNames['CN'], localName: '中国', color: '#FF4500' },
-            { code: 'IT', name: translations[lang].countryNames['IT'], localName: 'Italia', color: '#008000' },
-            { code: 'FR', name: translations[lang].countryNames['FR'], localName: 'France', color: '#4169E1' }
+            { code: 'DE', name: translations[lang].countryNames['DE'], localName: 'Deutschland', color: '#0077B6', flag: '🇩🇪' },
+            { code: 'PL', name: translations[lang].countryNames['PL'], localName: 'Polska', color: '#FF0000', flag: '🇵🇱' },
+            { code: 'ES', name: translations[lang].countryNames['ES'], localName: 'España', color: '#FFC300', flag: '🇪🇸' },
+            { code: 'GB', name: translations[lang].countryNames['GB'], localName: 'United Kingdom', color: '#8A2BE2', flag: '🇬🇧' },
+            { code: 'CN', name: translations[lang].countryNames['CN'], localName: '中国', color: '#FF4500', flag: '🇨🇳' },
+            { code: 'IT', name: translations[lang].countryNames['IT'], localName: 'Italia', color: '#008000', flag: '🇮🇹' },
+            { code: 'FR', name: translations[lang].countryNames['FR'], localName: 'France', color: '#4169E1', flag: '🇫🇷' }
         ];
 
         // Years for the dropdown
@@ -580,6 +1003,9 @@
             addHoliday('GB', 'New Year\'s Day', 'New Year\'s Day', 1, 1);
             addHoliday('CN', 'New Year\'s Day', '元旦', 1, 1);
 
+            // CN - Labour Day
+            addHoliday('CN', 'Labour Day', '劳动节', 5, 1);
+
             // DE, PL, IT, ES
             addHoliday('DE', 'Epiphany', 'Heilige Drei Könige', 1, 6);
             addHoliday('PL', 'Epiphany', 'Trzech Króli', 1, 6);
@@ -606,9 +1032,10 @@
             addHoliday('IT', 'Liberation Day', 'Festa della Liberazione', 4, 25);
             addHoliday('IT', 'Republic Day', 'Festa della Repubblica', 6, 2);
 
-            addHoliday('PL', 'Armed Forces Day', 'Święto Wojska Polskiego', 8, 15);
+            addHoliday('PL', 'Assumption of Mary', 'Wniebowzięcie Najświętszej Maryi Panny', 8, 15);
             addHoliday('DE', 'German Unity Day', 'Tag der Deutschen Einheit', 10, 3);
             addHoliday('ES', 'Hispanic Day', 'Fiesta Nacional de España', 10, 12);
+            addHoliday('DE', 'Reformation Day', 'Reformationstag', 10, 31);
            
           // DE, PL, IT\n, FR
             addHoliday('DE', 'All Saints\' Day', 'Allerheiligen', 11, 1);
@@ -648,15 +1075,17 @@
             addRelativeHoliday('FR', 'Easter Sunday', 'Pâques', easter, 0);
             addRelativeHoliday('ES', 'Easter Sunday', 'Domingo de Resurrección', easter, 0);
 
+            // ES - Maundy Thursday
+            addRelativeHoliday('ES', 'Maundy Thursday', 'Jueves Santo', easter, -3);
+
             // DE, PL, ES, GB, IT, FR
             addRelativeHoliday('DE', 'Good Friday', 'Karfreitag', easter, -2);
             addRelativeHoliday('ES', 'Good Friday', 'Viernes Santo', easter, -2);
             addRelativeHoliday('GB', 'Good Friday', 'Good Friday', easter, -2);
 
-            // DE, PL, ES, GB, IT, FR
+            // DE, PL, GB, IT, FR
             addRelativeHoliday('DE', 'Easter Monday', 'Ostermontag', easter, 1);
             addRelativeHoliday('PL', 'Easter Monday', 'Poniedziałek Wielkanocny', easter, 1);
-            addRelativeHoliday('ES', 'Easter Monday', 'Lunes de Pascua', easter, 1);
             addRelativeHoliday('GB', 'Easter Monday', 'Easter Monday', easter, 1);
             addRelativeHoliday('IT', 'Easter Monday', 'Lunedì dell\'Angelo', easter, 1);
             addRelativeHoliday('FR', 'Easter Monday', 'Lundi de Pâques', easter, 1);
@@ -675,22 +1104,12 @@
             addRelativeHoliday('PL', 'Corpus Christi', 'Boże Ciało', easter, 60);
 
 
-            // FR - Good Friday
-            addRelativeHoliday('FR', 'Good Friday', 'Vendredi Saint', easter, -2);
-            // IT - Good Friday  
-            addRelativeHoliday('IT', 'Good Friday', 'Venerdì Santo', easter, -2);
             // IT - Labour Day (May 1st)
             addHoliday('IT', 'Labour Day', 'Festa del Lavoro', 5, 1);
             // ES - Assumption of Mary
             addHoliday('ES', 'Assumption of Mary', 'Asunción de María', 8, 15);
             // ES - All Saints' Day
             addHoliday('ES', 'All Saints\' Day', 'Día de Todos los Santos', 11, 1);
-            // PL - Good Friday
-            addRelativeHoliday('PL', 'Good Friday', 'Piątek Wielkanocny', easter, -2);
-            // PL - Whit Sunday
-            addRelativeHoliday('PL', 'Whit Sunday', 'Zesłanie Ducha Świętego', easter, 49);
-            // PL - Christmas Eve
-            addHoliday('PL', 'Christmas Eve', 'Wigilia Bożego Narodzenia', 12, 24);
                                 
                      
                                 
@@ -753,6 +1172,7 @@
         // Main App Component
         function HolidayCalendarApp() {
             const [language, setLanguage] = useState('en'); // 'en' or 'ru'
+            const [darkTheme, setDarkTheme] = useState(false);
             const t = translations[language];
             const COUNTRIES = getCountries(language);
 
@@ -762,6 +1182,15 @@
             const [selectedDay, setSelectedDay] = useState(null);
             const [searchQuery, setSearchQuery] = useState('');
             const [showCountryDropdown, setShowCountryDropdown] = useState(false);
+
+            // Apply dark theme
+            useEffect(() => {
+                if (darkTheme) {
+                    document.body.classList.add('dark-theme');
+                } else {
+                    document.body.classList.remove('dark-theme');
+                }
+            }, [darkTheme]);
 
             // Filter holidays by year and selected countries
             const filteredHolidays = useMemo(() => {
@@ -798,6 +1227,20 @@
                 setSelectedCountries([]);
             };
 
+            // Calculate statistics
+            const holidayStats = useMemo(() => {
+                const stats = {};
+                selectedCountries.forEach(code => {
+                    const count = filteredHolidays.filter(h => h.countryCode === code).length;
+                    stats[code] = count;
+                });
+                return stats;
+            }, [filteredHolidays, selectedCountries]);
+
+            const totalHolidays = useMemo(() => {
+                return filteredHolidays.length;
+            }, [filteredHolidays]);
+
             return (
                 <div className="app-container">
                     <header className="header">
@@ -808,6 +1251,20 @@
                             <button onClick={() => setLanguage('en')} className={`btn ${language === 'en' ? 'btn-primary' : 'btn-secondary'}`}>English</button>
                         </div>
                     </header>
+
+                    {/* Legend */}
+                    <div className="legend-container">
+                        <div className="legend-title">🎨 {t.legend}</div>
+                        <div className="legend-grid">
+                            {COUNTRIES.map(country => (
+                                <div key={country.code} className="legend-item">
+                                    <span className="legend-flag">{country.flag}</span>
+                                    <div className="legend-color" style={{ backgroundColor: country.color }}></div>
+                                    <span className="legend-name">{country.name}</span>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
 
                     <div className="controls">
                         <div className="select-wrapper">
@@ -832,6 +1289,7 @@
                                     {COUNTRIES.map(country => (
                                         <div key={country.code} className="country-dropdown-item" onClick={() => toggleCountry(country.code)}>
                                             <input type="checkbox" readOnly checked={selectedCountries.includes(country.code)} />
+                                            <span style={{ fontSize: '1.2rem' }}>{country.flag}</span>
                                             <span style={{ color: country.color, fontWeight: 'bold' }}>■</span>
                                             <span>{country.name}</span>
                                         </div>
@@ -844,14 +1302,39 @@
                     <div className="country-chips">
                         {selectedCountries.map(code => {
                             const country = COUNTRIES.find(c => c.code === code);
+                            const count = holidayStats[code] || 0;
                             return (
                                 <div key={code} className="chip" style={{ backgroundColor: country.color, color: 'white' }}>
-                                    <span>{country.name}</span>
+                                    <span>{country.flag} {country.name}</span>
+                                    <span className="chip-counter">({count})</span>
                                     <button className="chip-close" onClick={() => toggleCountry(code)}>×</button>
                                 </div>
                             );
                         })}
                     </div>
+
+                    {/* Statistics */}
+                    {selectedCountries.length > 0 && (
+                        <div className="stats-container">
+                            <div className="stats-title">📊 {t.statistics} {selectedYear}</div>
+                            <div className="stats-total">{totalHolidays} {t.totalHolidays}</div>
+                            <div className="stats-grid">
+                                {selectedCountries.map(code => {
+                                    const country = COUNTRIES.find(c => c.code === code);
+                                    const count = holidayStats[code] || 0;
+                                    return (
+                                        <div key={code} className="stats-item">
+                                            <div className="stats-country">
+                                                <span style={{ fontSize: '1.2rem' }}>{country.flag}</span>
+                                                <span>{country.name}</span>
+                                            </div>
+                                            <div className="stats-count">{count} {t.days}</div>
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        </div>
+                    )}
 
                     <div className="calendar-container">
                         <div className="view-toggle">
@@ -869,7 +1352,16 @@
                             </button>
                         </div>
 
-                        {viewMode === 'calendar' ? (
+                        {selectedCountries.length === 0 ? (
+                            <div className="empty-state">
+                                <div className="empty-state-icon">📅</div>
+                                <div className="empty-state-title">{t.emptyStateTitle}</div>
+                                <div className="empty-state-text">{t.emptyStateText}</div>
+                                <button className="btn btn-primary" onClick={() => setShowCountryDropdown(true)}>
+                                    {t.selectCountries}
+                                </button>
+                            </div>
+                        ) : viewMode === 'calendar' ? (
                             <CalendarView
                                 year={selectedYear}
                                 holidaysByDate={holidaysByDate}
@@ -885,6 +1377,11 @@
                             />
                         )}
                     </div>
+
+                    {/* Theme Toggle */}
+                    <button className="theme-toggle" onClick={() => setDarkTheme(!darkTheme)} title="Toggle theme">
+                        {darkTheme ? '☀️' : '🌙'}
+                    </button>
 
                     {selectedDay && (
                         <DayModal
@@ -905,6 +1402,13 @@
             const months = t.months;
             const weekdays = t.weekdays;
 
+            const today = new Date();
+            const isToday = (year, month, day) => {
+                return today.getFullYear() === year &&
+                       today.getMonth() === month &&
+                       today.getDate() === day;
+            };
+
             const getCellStyle = (holidays) => {
                 if (!holidays || holidays.length === 0) return {};
                 if (holidays.length === 1) {
@@ -917,7 +1421,7 @@
                 });
                 const uniqueColors = [...new Set(colors)];
                 const stripeSize = 100 / uniqueColors.length;
-                const gradient = uniqueColors.map((color, index) => 
+                const gradient = uniqueColors.map((color, index) =>
                     `${color} ${index * stripeSize}%, ${color} ${(index + 1) * stripeSize}%`
                 ).join(', ');
                 return { background: `linear-gradient(to right, ${gradient})`, color: 'white' };
@@ -944,11 +1448,14 @@
                                         const holidays = holidaysByDate[dateStr] || [];
                                         const hasHoliday = holidays.length > 0;
                                         const style = getCellStyle(holidays);
+                                        const dayOfWeek = new Date(year, monthIndex, day).getDay();
+                                        const isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
+                                        const isTodayCell = isToday(year, monthIndex, day);
 
                                         return (
                                             <div
                                                 key={day}
-                                                className={`day-cell ${hasHoliday ? 'has-holiday' : ''}`}
+                                                className={`day-cell ${hasHoliday ? 'has-holiday' : ''} ${isWeekend ? 'weekend' : ''} ${isTodayCell ? 'today' : ''}`}
                                                 style={style}
                                                 onClick={() => hasHoliday && onDayClick(dateStr)}
                                                 title={hasHoliday ? holidays.map(h => `${h.name} (${(COUNTRIES.find(c => c.code === h.countryCode) || {}).name || h.countryCode})`).join('\n') : ''}
@@ -980,30 +1487,62 @@
                 });
             }, [holidays, searchQuery, COUNTRIES]);
 
+            // Group holidays by date and name
+            const groupedHolidays = useMemo(() => {
+                const groups = {};
+                filteredHolidays.forEach(holiday => {
+                    const key = `${holiday.date}-${holiday.name}`;
+                    if (!groups[key]) {
+                        groups[key] = {
+                            date: holiday.date,
+                            name: holiday.name,
+                            countries: []
+                        };
+                    }
+                    const country = COUNTRIES.find(c => c.code === holiday.countryCode);
+                    if (country) {
+                        groups[key].countries.push({
+                            ...country,
+                            localName: holiday.localName
+                        });
+                    }
+                });
+                return Object.values(groups).sort((a, b) => a.date.localeCompare(b.date));
+            }, [filteredHolidays, COUNTRIES]);
+
             return (
                 <div className="list-view-container">
-                    <input 
-                        type="text" 
-                        className="search-box" 
-                        placeholder={t.searchPlaceholder} 
-                        value={searchQuery} 
-                        onChange={(e) => onSearchChange(e.target.value)} 
+                    <input
+                        type="text"
+                        className="search-box"
+                        placeholder={t.searchPlaceholder}
+                        value={searchQuery}
+                        onChange={(e) => onSearchChange(e.target.value)}
                     />
                     <div>
-                        {filteredHolidays.map((holiday, index) => {
-                            const country = COUNTRIES.find(c => c.code === holiday.countryCode);
-                            return (
-                                <div key={index} className="list-item">
-                                    <div className="list-item-info">
-                                        <div className="holiday-name">{holiday.name}</div>
-                                        <div className="list-item-country" style={{ color: country ? country.color : '#ccc' }}>
-                                            {country ? country.name : holiday.countryCode}
-                                        </div>
-                                    </div>
-                                    <div className="list-item-date">{holiday.date}</div>
+                        {groupedHolidays.map((group, index) => (
+                            <div key={index} className="list-group">
+                                <div className="list-group-header">
+                                    <span>📅 {group.date}</span>
+                                    <span style={{ marginLeft: 'auto', fontWeight: 'normal' }}>{group.name}</span>
                                 </div>
-                            );
-                        })}
+                                <div className="list-group-countries">
+                                    {group.countries.map((country, idx) => (
+                                        <div
+                                            key={idx}
+                                            className="list-group-country-badge"
+                                            style={{ borderLeft: `3px solid ${country.color}` }}
+                                        >
+                                            <span style={{ marginRight: '5px' }}>{country.flag}</span>
+                                            {country.name}
+                                            <span style={{ marginLeft: '5px', color: '#64748b', fontSize: '0.8rem' }}>
+                                                ({country.localName})
+                                            </span>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        ))}
                     </div>
                 </div>
             );
@@ -1018,24 +1557,52 @@
             const day = dateObj.getDate();
             const year = dateObj.getFullYear();
 
+            // Group by holiday name
+            const groupedByName = useMemo(() => {
+                const groups = {};
+                holidays.forEach(holiday => {
+                    if (!groups[holiday.name]) {
+                        groups[holiday.name] = [];
+                    }
+                    const country = COUNTRIES.find(c => c.code === holiday.countryCode);
+                    groups[holiday.name].push({
+                        ...holiday,
+                        country
+                    });
+                });
+                return groups;
+            }, [holidays, COUNTRIES]);
+
             return (
                 <div className="modal-overlay" onClick={onClose}>
                     <div className="modal" onClick={e => e.stopPropagation()}>
                         <div className="modal-header">
-                            <h2 className="modal-title">{month} {day}, {year}</h2>
+                            <h2 className="modal-title">📅 {month} {day}, {year}</h2>
                             <button className="modal-close" onClick={onClose} title={t.close}>×</button>
                         </div>
                         <div>
-                            {holidays.map((holiday, index) => {
-                                const country = COUNTRIES.find(c => c.code === holiday.countryCode);
-                                const countryName = country ? country.name : holiday.countryCode;
-                                return (
-                                    <div key={index} className="holiday-item" style={{ borderLeft: `5px solid ${country ? country.color : '#ccc'}` }}>
-                                        <div className="holiday-name">{holiday.name} ({countryName})</div>
-                                        <div className="holiday-local">{holiday.localName}</div>
+                            {Object.entries(groupedByName).map(([name, items], index) => (
+                                <div key={index} style={{ marginBottom: '20px' }}>
+                                    <div style={{ fontSize: '1.2rem', fontWeight: 'bold', marginBottom: '10px', color: '#667eea' }}>
+                                        🎊 {name}
                                     </div>
-                                );
-                            })}
+                                    {items.map((item, idx) => (
+                                        <div
+                                            key={idx}
+                                            className="holiday-item"
+                                            style={{ borderLeft: `5px solid ${item.country ? item.country.color : '#ccc'}` }}
+                                        >
+                                            <div className="holiday-name">
+                                                <span style={{ fontSize: '1.3rem', marginRight: '8px' }}>
+                                                    {item.country ? item.country.flag : '🏳️'}
+                                                </span>
+                                                {item.country ? item.country.name : item.countryCode}
+                                            </div>
+                                            <div className="holiday-local">└─ {item.localName}</div>
+                                        </div>
+                                    ))}
+                                </div>
+                            ))}
                         </div>
                     </div>
                 </div>
