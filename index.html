@@ -480,40 +480,48 @@
             font-weight: 600;
             color: #334155;
             margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
+            text-align: center;
         }
 
         .legend-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 12px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: nowrap;
+            overflow-x: auto;
+            padding: 10px 0;
         }
 
         .legend-item {
             display: flex;
             align-items: center;
             gap: 8px;
-            padding: 8px;
-            border-radius: 8px;
+            padding: 10px 15px;
+            border-radius: 10px;
             transition: all 0.2s ease;
+            background: #f8fafc;
+            white-space: nowrap;
+            min-width: fit-content;
         }
 
         .legend-item:hover {
-            background: #f8fafc;
-            transform: translateX(5px);
+            background: #f1f5f9;
+            transform: translateY(-3px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
         .legend-color {
-            width: 24px;
-            height: 24px;
-            border-radius: 6px;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            flex-shrink: 0;
         }
 
         .legend-flag {
             font-size: 1.5rem;
+            flex-shrink: 0;
         }
 
         .legend-name {
@@ -809,7 +817,12 @@
             }
 
             .legend-grid {
-                grid-template-columns: 1fr;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .legend-item {
+                min-width: auto;
             }
 
             .header h1 {
@@ -823,12 +836,30 @@
                 height: 50px;
             }
 
+            .bitrix-float-button {
+                bottom: 90px;
+                right: 20px;
+                width: 50px;
+                height: 50px;
+                font-size: 1.5rem;
+            }
+
             .controls {
                 flex-direction: column;
             }
 
-            .modal {
+            .modal,
+            .bitrix-modal {
                 max-width: 90%;
+                padding: 20px;
+            }
+
+            .bitrix-actions {
+                flex-direction: column;
+            }
+
+            .bitrix-actions button {
+                width: 100%;
             }
         }
 
@@ -876,16 +907,73 @@
         }
 
         /* Bitrix24 Integration */
-        .bitrix-container {
-            background: white;
-            border-radius: 12px;
+        .bitrix-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1001;
+            animation: fadeIn 0.3s ease;
             padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
         }
 
-        body.dark-theme .bitrix-container {
+        .bitrix-modal {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            max-width: 700px;
+            width: 100%;
+            max-height: 85vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            animation: slideUp 0.3s ease;
+        }
+
+        body.dark-theme .bitrix-modal {
             background: #16213e;
+        }
+
+        .bitrix-float-button {
+            position: fixed;
+            bottom: 100px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+            font-size: 1.8rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            z-index: 998;
+        }
+
+        .bitrix-float-button:hover {
+            transform: scale(1.1) rotate(-10deg);
+            box-shadow: 0 6px 16px rgba(16, 185, 129, 0.6);
+        }
+
+        .bitrix-float-button .badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: #ef4444;
+            color: white;
+            font-size: 0.7rem;
+            font-weight: 600;
+            padding: 3px 7px;
+            border-radius: 10px;
+            min-width: 20px;
+            text-align: center;
         }
 
         .bitrix-header {
@@ -1441,6 +1529,7 @@
             const [bitrixTaskTitle, setBitrixTaskTitle] = useState(localStorage.getItem('bitrixTaskTitle') || t.bitrixTaskTitlePlaceholder);
             const [bitrixTaskDescription, setBitrixTaskDescription] = useState(localStorage.getItem('bitrixTaskDescription') || t.bitrixTaskDescriptionPlaceholder);
             const [bitrixNotification, setBitrixNotification] = useState(null);
+            const [showBitrixModal, setShowBitrixModal] = useState(false);
 
             // Apply dark theme
             useEffect(() => {
@@ -1705,16 +1794,32 @@
                         </div>
                     )}
 
-                    {/* Bitrix24 Integration */}
+                    {/* Bitrix24 Floating Button */}
                     {selectedCountries.length > 0 && (
-                        <div className="bitrix-container">
-                            <div className="bitrix-header">
-                                <div className="bitrix-title">
-                                    <span>📋</span> {t.bitrixTitle}
-                                </div>
-                            </div>
+                        <button
+                            className="bitrix-float-button"
+                            onClick={() => setShowBitrixModal(true)}
+                            title={t.bitrixTitle}
+                        >
+                            📋
+                            {upcomingHolidays.length > 0 && (
+                                <span className="badge">{upcomingHolidays.length}</span>
+                            )}
+                        </button>
+                    )}
 
-                            <div className="bitrix-form">
+                    {/* Bitrix24 Modal */}
+                    {showBitrixModal && (
+                        <div className="bitrix-modal-overlay" onClick={() => setShowBitrixModal(false)}>
+                            <div className="bitrix-modal" onClick={(e) => e.stopPropagation()}>
+                                <div className="bitrix-header">
+                                    <div className="bitrix-title">
+                                        <span>📋</span> {t.bitrixTitle}
+                                    </div>
+                                    <button className="modal-close" onClick={() => setShowBitrixModal(false)} title={t.close}>×</button>
+                                </div>
+
+                                <div className="bitrix-form">
                                 <div className="bitrix-input-group">
                                     <label className="bitrix-label">{t.bitrixWebhook}</label>
                                     <input
@@ -1818,6 +1923,7 @@
                                         <span>{bitrixNotification.message}</span>
                                     </div>
                                 )}
+                                </div>
                             </div>
                         </div>
                     )}
