@@ -1648,8 +1648,16 @@
             // Bitrix24 integration state
             const [bitrixWebhook, setBitrixWebhook] = useState(localStorage.getItem('bitrixWebhook') || '');
             const [bitrixUsers, setBitrixUsers] = useState(() => {
-                const saved = localStorage.getItem('bitrixUsers') || '';
-                return saved ? saved.split(',').map(id => id.trim()).filter(id => id) : [];
+                try {
+                    const saved = localStorage.getItem('bitrixUsers') || '';
+                    // Validate that saved value contains only numbers and commas
+                    if (saved && /^[\d,\s]+$/.test(saved)) {
+                        return saved.split(',').map(id => id.trim()).filter(id => id && /^\d+$/.test(id));
+                    }
+                    return [];
+                } catch (e) {
+                    return [];
+                }
             });
             const [bitrixUserInput, setBitrixUserInput] = useState('');
             const [bitrixTaskTitle, setBitrixTaskTitle] = useState(localStorage.getItem('bitrixTaskTitle') || t.bitrixTaskTitlePlaceholder);
@@ -1665,6 +1673,32 @@
                     document.body.classList.remove('dark-theme');
                 }
             }, [darkTheme]);
+
+            // Clean up invalid localStorage data on mount
+            useEffect(() => {
+                const saved = localStorage.getItem('bitrixUsers') || '';
+                // If saved data contains invalid characters, clear it
+                if (saved && !/^[\d,\s]*$/.test(saved)) {
+                    localStorage.setItem('bitrixUsers', '');
+                }
+            }, []);
+
+            // Auto-save Bitrix24 settings to localStorage
+            useEffect(() => {
+                localStorage.setItem('bitrixWebhook', bitrixWebhook);
+            }, [bitrixWebhook]);
+
+            useEffect(() => {
+                localStorage.setItem('bitrixUsers', bitrixUsers.join(','));
+            }, [bitrixUsers]);
+
+            useEffect(() => {
+                localStorage.setItem('bitrixTaskTitle', bitrixTaskTitle);
+            }, [bitrixTaskTitle]);
+
+            useEffect(() => {
+                localStorage.setItem('bitrixTaskDescription', bitrixTaskDescription);
+            }, [bitrixTaskDescription]);
 
             // Filter holidays by year and selected countries
             const filteredHolidays = useMemo(() => {
@@ -1731,10 +1765,10 @@
             const addBitrixUser = () => {
                 if (!bitrixUserInput.trim()) return;
 
-                // Parse comma-separated input
+                // Parse comma-separated input - only accept numbers
                 const newUsers = bitrixUserInput.split(',')
                     .map(id => id.trim())
-                    .filter(id => id && !bitrixUsers.includes(id));
+                    .filter(id => id && /^\d+$/.test(id) && !bitrixUsers.includes(id));
 
                 if (newUsers.length > 0) {
                     setBitrixUsers([...bitrixUsers, ...newUsers]);
@@ -1745,15 +1779,6 @@
             // Remove user from list
             const removeBitrixUser = (userId) => {
                 setBitrixUsers(bitrixUsers.filter(id => id !== userId));
-            };
-
-            // Save Bitrix24 settings
-            const saveBitrixSettings = () => {
-                localStorage.setItem('bitrixWebhook', bitrixWebhook);
-                localStorage.setItem('bitrixUsers', bitrixUsers.join(','));
-                localStorage.setItem('bitrixTaskTitle', bitrixTaskTitle);
-                localStorage.setItem('bitrixTaskDescription', bitrixTaskDescription);
-                showBitrixNotification('success', t.bitrixSettingsSaved);
             };
 
             // Test Bitrix24 connection
@@ -1984,7 +2009,11 @@
                                             className="bitrix-input"
                                             placeholder={t.bitrixUsersPlaceholder}
                                             value={bitrixUserInput}
-                                            onChange={(e) => setBitrixUserInput(e.target.value)}
+                                            onChange={(e) => {
+                                                // Only allow numbers, commas and spaces
+                                                const value = e.target.value.replace(/[^\d,\s]/g, '');
+                                                setBitrixUserInput(value);
+                                            }}
                                             onKeyPress={(e) => e.key === 'Enter' && addBitrixUser()}
                                         />
                                         <button
@@ -2071,9 +2100,6 @@
 
                                 {/* Actions */}
                                 <div className="bitrix-actions">
-                                    <button className="btn btn-secondary" onClick={saveBitrixSettings}>
-                                        💾 {t.bitrixSaveSettings}
-                                    </button>
                                     <button className="btn btn-secondary" onClick={testBitrixConnection}>
                                         🔌 {t.bitrixTestConnection}
                                     </button>
