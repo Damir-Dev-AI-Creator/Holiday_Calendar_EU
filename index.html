@@ -1175,6 +1175,128 @@
             color: #93c5fd;
         }
 
+        /* Bitrix24 User Chips */
+        .bitrix-users-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 10px;
+            min-height: 40px;
+            padding: 8px;
+            background: #f8fafc;
+            border-radius: 8px;
+        }
+
+        body.dark-theme .bitrix-users-chips {
+            background: #0f1729;
+        }
+
+        .bitrix-user-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            border-radius: 16px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            transition: all 0.2s ease;
+            animation: chipIn 0.2s ease;
+        }
+
+        @keyframes chipIn {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .bitrix-user-chip:hover {
+            transform: scale(1.05);
+            box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
+        }
+
+        .bitrix-user-chip-close {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.2s ease;
+            color: white;
+        }
+
+        .bitrix-user-chip-close:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.1);
+        }
+
+        .bitrix-users-empty {
+            color: #94a3b8;
+            font-size: 0.85rem;
+            padding: 8px;
+        }
+
+        .bitrix-users-count {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.85rem;
+            color: #64748b;
+            margin-top: 5px;
+        }
+
+        body.dark-theme .bitrix-users-count {
+            color: #94a3b8;
+        }
+
+        .bitrix-input-with-button {
+            display: flex;
+            gap: 8px;
+        }
+
+        .bitrix-input-with-button input {
+            flex: 1;
+        }
+
+        .bitrix-add-button {
+            padding: 10px 16px;
+            background: #10b981;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+        }
+
+        .bitrix-add-button:hover {
+            background: #059669;
+            transform: translateY(-1px);
+        }
+
+        .bitrix-add-button:disabled {
+            background: #cbd5e1;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        body.dark-theme .bitrix-add-button:disabled {
+            background: #475569;
+        }
+
     </style>
 </head>
 <body>
@@ -1525,7 +1647,11 @@
 
             // Bitrix24 integration state
             const [bitrixWebhook, setBitrixWebhook] = useState(localStorage.getItem('bitrixWebhook') || '');
-            const [bitrixUsers, setBitrixUsers] = useState(localStorage.getItem('bitrixUsers') || '');
+            const [bitrixUsers, setBitrixUsers] = useState(() => {
+                const saved = localStorage.getItem('bitrixUsers') || '';
+                return saved ? saved.split(',').map(id => id.trim()).filter(id => id) : [];
+            });
+            const [bitrixUserInput, setBitrixUserInput] = useState('');
             const [bitrixTaskTitle, setBitrixTaskTitle] = useState(localStorage.getItem('bitrixTaskTitle') || t.bitrixTaskTitlePlaceholder);
             const [bitrixTaskDescription, setBitrixTaskDescription] = useState(localStorage.getItem('bitrixTaskDescription') || t.bitrixTaskDescriptionPlaceholder);
             const [bitrixNotification, setBitrixNotification] = useState(null);
@@ -1601,10 +1727,30 @@
                 }).sort((a, b) => a.date.localeCompare(b.date));
             }, [filteredHolidays]);
 
+            // Add user to list
+            const addBitrixUser = () => {
+                if (!bitrixUserInput.trim()) return;
+
+                // Parse comma-separated input
+                const newUsers = bitrixUserInput.split(',')
+                    .map(id => id.trim())
+                    .filter(id => id && !bitrixUsers.includes(id));
+
+                if (newUsers.length > 0) {
+                    setBitrixUsers([...bitrixUsers, ...newUsers]);
+                    setBitrixUserInput('');
+                }
+            };
+
+            // Remove user from list
+            const removeBitrixUser = (userId) => {
+                setBitrixUsers(bitrixUsers.filter(id => id !== userId));
+            };
+
             // Save Bitrix24 settings
             const saveBitrixSettings = () => {
                 localStorage.setItem('bitrixWebhook', bitrixWebhook);
-                localStorage.setItem('bitrixUsers', bitrixUsers);
+                localStorage.setItem('bitrixUsers', bitrixUsers.join(','));
                 localStorage.setItem('bitrixTaskTitle', bitrixTaskTitle);
                 localStorage.setItem('bitrixTaskDescription', bitrixTaskDescription);
                 showBitrixNotification('success', t.bitrixSettingsSaved);
@@ -1634,12 +1780,11 @@
 
             // Create tasks in Bitrix24
             const createBitrixTasks = async () => {
-                if (!bitrixWebhook || !bitrixUsers || upcomingHolidays.length === 0) {
+                if (!bitrixWebhook || bitrixUsers.length === 0 || upcomingHolidays.length === 0) {
                     showBitrixNotification('error', t.bitrixTasksError);
                     return;
                 }
 
-                const userIds = bitrixUsers.split(',').map(id => id.trim()).filter(id => id);
                 let tasksCreated = 0;
                 let tasksFailed = 0;
 
@@ -1655,7 +1800,7 @@
                         `Дата: ${holiday.date}\n` +
                         `Дней до праздника: ${daysUntil}`;
 
-                    for (const userId of userIds) {
+                    for (const userId of bitrixUsers) {
                         try {
                             const taskData = {
                                 fields: {
@@ -1832,14 +1977,39 @@
                                 </div>
 
                                 <div className="bitrix-input-group">
-                                    <label className="bitrix-label">{t.bitrixUsers}</label>
-                                    <input
-                                        type="text"
-                                        className="bitrix-input"
-                                        placeholder={t.bitrixUsersPlaceholder}
-                                        value={bitrixUsers}
-                                        onChange={(e) => setBitrixUsers(e.target.value)}
-                                    />
+                                    <label className="bitrix-label">{t.bitrixUsers} {bitrixUsers.length > 0 && `(${bitrixUsers.length})`}</label>
+                                    <div className="bitrix-input-with-button">
+                                        <input
+                                            type="text"
+                                            className="bitrix-input"
+                                            placeholder={t.bitrixUsersPlaceholder}
+                                            value={bitrixUserInput}
+                                            onChange={(e) => setBitrixUserInput(e.target.value)}
+                                            onKeyPress={(e) => e.key === 'Enter' && addBitrixUser()}
+                                        />
+                                        <button
+                                            className="bitrix-add-button"
+                                            onClick={addBitrixUser}
+                                        >
+                                            + Добавить
+                                        </button>
+                                    </div>
+                                    {bitrixUsers.length > 0 && (
+                                        <div className="bitrix-users-chips">
+                                            {bitrixUsers.map((userId) => (
+                                                <div key={userId} className="bitrix-user-chip">
+                                                    <span>👤 {userId}</span>
+                                                    <button
+                                                        className="bitrix-user-chip-close"
+                                                        onClick={() => removeBitrixUser(userId)}
+                                                        title="Удалить пользователя"
+                                                    >
+                                                        ×
+                                                    </button>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    )}
                                 </div>
 
                                 <div className="bitrix-input-group">
