@@ -1454,6 +1454,16 @@
                 addHoliday(countryCode, name, localName, date.getMonth() + 1, date.getDate());
             };
 
+            // Function to add multi-day holiday periods (e.g., China Golden Week)
+            const addHolidayPeriod = (countryCode, name, localName, startMonth, startDay, numDays) => {
+                for (let i = 0; i < numDays; i++) {
+                    const date = new Date(year, startMonth - 1, startDay + i);
+                    const dayNum = i + 1;
+                    const suffix = numDays > 1 ? ` (Day ${dayNum}/${numDays})` : '';
+                    addHoliday(countryCode, `${name}${suffix}`, `${localName}${suffix}`, date.getMonth() + 1, date.getDate());
+                }
+            };
+
             // Fixed holidays
             // Fixed holidays
            // DE, PL, ES, IT, FR, GB\n            
@@ -1463,10 +1473,7 @@
                        addHoliday('IT', 'New Year\'s Day', 'Capodanno', 1, 1);
             addHoliday('FR', 'New Year\'s Day', 'Jour de l\'an', 1, 1);
             addHoliday('GB', 'New Year\'s Day', 'New Year\'s Day', 1, 1);
-            addHoliday('CN', 'New Year\'s Day', '元旦', 1, 1);
-
-            // CN - Labour Day
-            addHoliday('CN', 'Labour Day', '劳动节', 5, 1);
+            // CN holidays are now handled as multi-day periods below
 
             // DE, PL, IT, ES
             addHoliday('DE', 'Epiphany', 'Heilige Drei Könige', 1, 6);
@@ -1617,37 +1624,141 @@
                 addHoliday('GB', 'Boxing Day (substitute)', 'Boxing Day (substitute)', 12, 28);
             }
 
-            // China specific (Lunar-based holidays - precise Gregorian dates 2026-2035)
-            const chinaLunarHolidays = {
-                2026: { cny: '02-17', qmf: '04-05', dbf: '06-19', maf: '09-25' },
-                2027: { cny: '02-06', qmf: '04-05', dbf: '06-09', maf: '09-15' },
-                2028: { cny: '01-26', qmf: '04-04', dbf: '05-28', maf: '10-03' },
-                2029: { cny: '02-13', qmf: '04-05', dbf: '06-16', maf: '09-22' },
-                2030: { cny: '02-03', qmf: '04-05', dbf: '06-05', maf: '09-12' },
-                2031: { cny: '01-23', qmf: '04-05', dbf: '06-24', maf: '10-01' },
-                2032: { cny: '02-11', qmf: '04-04', dbf: '06-12', maf: '09-19' },
-                2033: { cny: '01-31', qmf: '04-05', dbf: '06-01', maf: '09-08' },
-                2034: { cny: '02-19', qmf: '04-05', dbf: '06-20', maf: '09-27' },
-                2035: { cny: '02-08', qmf: '04-05', dbf: '06-10', maf: '09-16' },
+            // China specific holiday periods (official dates from State Council)
+            // 2026 dates are official (announced Nov 4, 2025), other years use standard patterns
+            const chinaHolidayPeriods = {
+                // 2026 - Official State Council announcement
+                2026: {
+                    newYear: { start: [1, 1], days: 3 },           // Jan 1-3
+                    springFestival: { start: [2, 15], days: 9 },   // Feb 15-23 (record 9 days)
+                    qingming: { start: [4, 4], days: 3 },          // Apr 4-6
+                    labourDay: { start: [5, 1], days: 5 },         // May 1-5
+                    dragonBoat: { start: [6, 19], days: 3 },       // Jun 19-21
+                    midAutumn: { start: [9, 25], days: 3 },        // Sep 25-27
+                    nationalDay: { start: [10, 1], days: 7 }       // Oct 1-7
+                },
+                // 2027 - Based on lunar calendar (CNY: Feb 6)
+                2027: {
+                    newYear: { start: [1, 1], days: 3 },
+                    springFestival: { start: [2, 4], days: 7 },    // Feb 4-10 (CNY Feb 6)
+                    qingming: { start: [4, 3], days: 3 },          // Apr 3-5
+                    labourDay: { start: [5, 1], days: 5 },
+                    dragonBoat: { start: [6, 7], days: 3 },        // Jun 7-9 (DBF Jun 9)
+                    midAutumn: { start: [9, 13], days: 3 },        // Sep 13-15 (MAF Sep 15)
+                    nationalDay: { start: [10, 1], days: 7 }
+                },
+                // 2028 - (CNY: Jan 26)
+                2028: {
+                    newYear: { start: [1, 1], days: 3 },
+                    springFestival: { start: [1, 24], days: 7 },   // Jan 24-30 (CNY Jan 26)
+                    qingming: { start: [4, 2], days: 3 },          // Apr 2-4
+                    labourDay: { start: [5, 1], days: 5 },
+                    dragonBoat: { start: [5, 26], days: 3 },       // May 26-28 (DBF May 28)
+                    midAutumn: { start: [10, 1], days: 8 },        // Oct 1-8 (MAF Oct 3 + National Day combined!)
+                    nationalDay: null                               // Combined with Mid-Autumn
+                },
+                // 2029 - (CNY: Feb 13)
+                2029: {
+                    newYear: { start: [1, 1], days: 3 },
+                    springFestival: { start: [2, 11], days: 7 },   // Feb 11-17 (CNY Feb 13)
+                    qingming: { start: [4, 3], days: 3 },          // Apr 3-5
+                    labourDay: { start: [5, 1], days: 5 },
+                    dragonBoat: { start: [6, 14], days: 3 },       // Jun 14-16 (DBF Jun 16)
+                    midAutumn: { start: [9, 20], days: 3 },        // Sep 20-22 (MAF Sep 22)
+                    nationalDay: { start: [10, 1], days: 7 }
+                },
+                // 2030 - (CNY: Feb 3)
+                2030: {
+                    newYear: { start: [1, 1], days: 3 },
+                    springFestival: { start: [2, 1], days: 7 },    // Feb 1-7 (CNY Feb 3)
+                    qingming: { start: [4, 3], days: 3 },          // Apr 3-5
+                    labourDay: { start: [5, 1], days: 5 },
+                    dragonBoat: { start: [6, 3], days: 3 },        // Jun 3-5 (DBF Jun 5)
+                    midAutumn: { start: [9, 10], days: 3 },        // Sep 10-12 (MAF Sep 12)
+                    nationalDay: { start: [10, 1], days: 7 }
+                },
+                // 2031 - (CNY: Jan 23, MAF Oct 1 - combined with National Day)
+                2031: {
+                    newYear: { start: [1, 1], days: 3 },
+                    springFestival: { start: [1, 21], days: 7 },   // Jan 21-27 (CNY Jan 23)
+                    qingming: { start: [4, 3], days: 3 },          // Apr 3-5
+                    labourDay: { start: [5, 1], days: 5 },
+                    dragonBoat: { start: [6, 22], days: 3 },       // Jun 22-24 (DBF Jun 24)
+                    midAutumn: { start: [10, 1], days: 8 },        // Oct 1-8 (MAF Oct 1 + National Day combined!)
+                    nationalDay: null                               // Combined with Mid-Autumn
+                },
+                // 2032 - (CNY: Feb 11)
+                2032: {
+                    newYear: { start: [1, 1], days: 3 },
+                    springFestival: { start: [2, 9], days: 7 },    // Feb 9-15 (CNY Feb 11)
+                    qingming: { start: [4, 2], days: 3 },          // Apr 2-4
+                    labourDay: { start: [5, 1], days: 5 },
+                    dragonBoat: { start: [6, 10], days: 3 },       // Jun 10-12 (DBF Jun 12)
+                    midAutumn: { start: [9, 17], days: 3 },        // Sep 17-19 (MAF Sep 19)
+                    nationalDay: { start: [10, 1], days: 7 }
+                },
+                // 2033 - (CNY: Jan 31)
+                2033: {
+                    newYear: { start: [1, 1], days: 3 },
+                    springFestival: { start: [1, 29], days: 7 },   // Jan 29-Feb 4 (CNY Jan 31)
+                    qingming: { start: [4, 3], days: 3 },          // Apr 3-5
+                    labourDay: { start: [5, 1], days: 5 },
+                    dragonBoat: { start: [5, 30], days: 3 },       // May 30-Jun 1 (DBF Jun 1)
+                    midAutumn: { start: [9, 6], days: 3 },         // Sep 6-8 (MAF Sep 8)
+                    nationalDay: { start: [10, 1], days: 7 }
+                },
+                // 2034 - (CNY: Feb 19)
+                2034: {
+                    newYear: { start: [1, 1], days: 3 },
+                    springFestival: { start: [2, 17], days: 7 },   // Feb 17-23 (CNY Feb 19)
+                    qingming: { start: [4, 3], days: 3 },          // Apr 3-5
+                    labourDay: { start: [5, 1], days: 5 },
+                    dragonBoat: { start: [6, 18], days: 3 },       // Jun 18-20 (DBF Jun 20)
+                    midAutumn: { start: [9, 25], days: 3 },        // Sep 25-27 (MAF Sep 27)
+                    nationalDay: { start: [10, 1], days: 7 }
+                },
+                // 2035 - (CNY: Feb 8)
+                2035: {
+                    newYear: { start: [1, 1], days: 3 },
+                    springFestival: { start: [2, 6], days: 7 },    // Feb 6-12 (CNY Feb 8)
+                    qingming: { start: [4, 3], days: 3 },          // Apr 3-5
+                    labourDay: { start: [5, 1], days: 5 },
+                    dragonBoat: { start: [6, 8], days: 3 },        // Jun 8-10 (DBF Jun 10)
+                    midAutumn: { start: [9, 14], days: 3 },        // Sep 14-16 (MAF Sep 16)
+                    nationalDay: { start: [10, 1], days: 7 }
+                }
             };
 
-            if (chinaLunarHolidays[year]) {
-                const h = chinaLunarHolidays[year];
-                const parseDate = (dateStr) => dateStr.split('-').map(Number);
+            // Add China holiday periods
+            if (chinaHolidayPeriods[year]) {
+                const periods = chinaHolidayPeriods[year];
 
-                let [m_cny, d_cny] = parseDate(h.cny);
-                addHoliday('CN', 'Chinese New Year', '春节', m_cny, d_cny);
-
-                let [m_qmf, d_qmf] = parseDate(h.qmf);
-                addHoliday('CN', 'Qingming Festival', '清明节', m_qmf, d_qmf);
-
-                let [m_dbf, d_dbf] = parseDate(h.dbf);
-                addHoliday('CN', 'Dragon Boat Festival', '端午节', m_dbf, d_dbf);
-
-                let [m_maf, d_maf] = parseDate(h.maf);
-                addHoliday('CN', 'Mid-Autumn Festival', '中秋节', m_maf, d_maf);
+                if (periods.newYear) {
+                    addHolidayPeriod('CN', 'New Year Holiday', '元旦假期', periods.newYear.start[0], periods.newYear.start[1], periods.newYear.days);
+                }
+                if (periods.springFestival) {
+                    addHolidayPeriod('CN', 'Spring Festival', '春节', periods.springFestival.start[0], periods.springFestival.start[1], periods.springFestival.days);
+                }
+                if (periods.qingming) {
+                    addHolidayPeriod('CN', 'Qingming Festival', '清明节', periods.qingming.start[0], periods.qingming.start[1], periods.qingming.days);
+                }
+                if (periods.labourDay) {
+                    addHolidayPeriod('CN', 'Labour Day Holiday', '劳动节假期', periods.labourDay.start[0], periods.labourDay.start[1], periods.labourDay.days);
+                }
+                if (periods.dragonBoat) {
+                    addHolidayPeriod('CN', 'Dragon Boat Festival', '端午节', periods.dragonBoat.start[0], periods.dragonBoat.start[1], periods.dragonBoat.days);
+                }
+                if (periods.midAutumn) {
+                    // Check if combined with National Day
+                    const isCombined = periods.nationalDay === null;
+                    const name = isCombined ? 'Mid-Autumn + National Day' : 'Mid-Autumn Festival';
+                    const localName = isCombined ? '中秋节+国庆节' : '中秋节';
+                    addHolidayPeriod('CN', name, localName, periods.midAutumn.start[0], periods.midAutumn.start[1], periods.midAutumn.days);
+                }
+                if (periods.nationalDay) {
+                    addHolidayPeriod('CN', 'National Day Golden Week', '国庆节黄金周', periods.nationalDay.start[0], periods.nationalDay.start[1], periods.nationalDay.days);
+                }
             }
-            addHoliday('CN', 'National Day', '国庆节', 10, 1);
 
             return holidays;
         };
