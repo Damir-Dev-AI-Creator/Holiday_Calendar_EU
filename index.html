@@ -1594,6 +1594,29 @@
                 ukVariableHolidays[year].forEach(h => addHoliday('GB', h.name, h.name, h.m, h.d));
             }
 
+            // UK Christmas/Boxing Day substitute bank holidays (when they fall on weekends)
+            // According to UK law, if a bank holiday falls on Sat/Sun, a substitute day is given on the next working day
+            const christmasDay = new Date(year, 11, 25);
+            const boxingDay = new Date(year, 11, 26);
+            const christmasDayOfWeek = christmasDay.getDay(); // 0=Sun, 6=Sat
+            const boxingDayOfWeek = boxingDay.getDay();
+
+            // Calculate substitute days for UK Christmas period
+            if (christmasDayOfWeek === 6) { // Christmas on Saturday
+                // Christmas substitute: Monday 27 Dec, Boxing Day substitute: Tuesday 28 Dec
+                addHoliday('GB', 'Christmas Day (substitute)', 'Christmas Day (substitute)', 12, 27);
+                addHoliday('GB', 'Boxing Day (substitute)', 'Boxing Day (substitute)', 12, 28);
+            } else if (christmasDayOfWeek === 0) { // Christmas on Sunday
+                // Boxing Day: Monday 26 Dec (normal), Christmas substitute: Tuesday 27 Dec
+                addHoliday('GB', 'Christmas Day (substitute)', 'Christmas Day (substitute)', 12, 27);
+            } else if (boxingDayOfWeek === 6) { // Boxing Day on Saturday (Christmas on Friday)
+                // Boxing Day substitute: Monday 28 Dec
+                addHoliday('GB', 'Boxing Day (substitute)', 'Boxing Day (substitute)', 12, 28);
+            } else if (boxingDayOfWeek === 0) { // Boxing Day on Sunday (Christmas on Saturday handled above)
+                // Boxing Day substitute: Monday 28 Dec
+                addHoliday('GB', 'Boxing Day (substitute)', 'Boxing Day (substitute)', 12, 28);
+            }
+
             // China specific (Lunar-based holidays - precise Gregorian dates 2026-2035)
             const chinaLunarHolidays = {
                 2026: { cny: '02-17', qmf: '04-05', dbf: '06-19', maf: '09-25' },
