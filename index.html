@@ -303,7 +303,7 @@
             max-height: 80vh;
             overflow-y: auto;
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
-    imation: slideUp 0.3s ease;
+            animation: slideUp 0.3s ease;
         }
 
         @keyframes slideUp {
@@ -464,6 +464,839 @@
             margin-right: 10px;
         }
 
+        /* New UX/UI Improvements */
+
+        /* Legend */
+        .legend-container {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .legend-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #334155;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .legend-grid {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: nowrap;
+            overflow-x: auto;
+            padding: 10px 0;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 15px;
+            border-radius: 10px;
+            transition: all 0.2s ease;
+            background: #f8fafc;
+            white-space: nowrap;
+            min-width: fit-content;
+        }
+
+        .legend-item:hover {
+            background: #f1f5f9;
+            transform: translateY(-3px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            flex-shrink: 0;
+        }
+
+        .legend-flag {
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .legend-name {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #475569;
+        }
+
+        /* Statistics Panel */
+        .stats-container {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .stats-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #334155;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .stats-total {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #667eea;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .stats-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .stats-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            border-radius: 8px;
+            background: #f8fafc;
+            transition: all 0.2s ease;
+        }
+
+        .stats-item:hover {
+            background: #f1f5f9;
+            transform: scale(1.02);
+        }
+
+        .stats-country {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .stats-count {
+            font-weight: 600;
+            padding: 4px 12px;
+            border-radius: 12px;
+            background: white;
+            color: #667eea;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #64748b;
+        }
+
+        .empty-state-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            opacity: 0.5;
+        }
+
+        .empty-state-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #334155;
+        }
+
+        .empty-state-text {
+            font-size: 1rem;
+            margin-bottom: 30px;
+        }
+
+        /* Weekend highlighting */
+        .day-cell.weekend {
+            background: #f8fafc;
+        }
+
+        .day-cell.weekend.has-holiday {
+            background: inherit;
+        }
+
+        /* Current day indicator */
+        .day-cell.today {
+            border: 2px solid #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+            }
+            50% {
+                box-shadow: 0 0 0 6px rgba(102, 126, 234, 0.1);
+            }
+        }
+
+        /* Holiday counter in chips */
+        .chip-counter {
+            background: rgba(255, 255, 255, 0.3);
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        /* Dark theme */
+        body.dark-theme {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #e0e0e0;
+        }
+
+        body.dark-theme .header h1 {
+            background: linear-gradient(135deg, #00d4ff 0%, #667eea 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        body.dark-theme .header p {
+            color: #94a3b8;
+        }
+
+        body.dark-theme .calendar-container,
+        body.dark-theme .legend-container,
+        body.dark-theme .stats-container,
+        body.dark-theme .list-view-container {
+            background: #16213e;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        body.dark-theme .month-block {
+            background: #0f1729;
+        }
+
+        body.dark-theme .month-header {
+            color: #e0e0e0;
+            border-bottom-color: #2d3748;
+        }
+
+        body.dark-theme .weekday {
+            color: #94a3b8;
+        }
+
+        body.dark-theme .day-cell {
+            background: #1a2332;
+            color: #e0e0e0;
+        }
+
+        body.dark-theme .day-cell.weekend {
+            background: #0f1729;
+        }
+
+        body.dark-theme .modal {
+            background: #16213e;
+            color: #e0e0e0;
+        }
+
+        body.dark-theme .modal-title {
+            color: #e0e0e0;
+        }
+
+        body.dark-theme .modal-close {
+            background: #0f1729;
+            color: #94a3b8;
+        }
+
+        body.dark-theme .modal-close:hover {
+            background: #1a2332;
+            color: #e0e0e0;
+        }
+
+        body.dark-theme .holiday-item {
+            background: #0f1729;
+            border-color: #2d3748;
+        }
+
+        body.dark-theme .search-box,
+        body.dark-theme select {
+            background: #0f1729;
+            color: #e0e0e0;
+            border-color: #2d3748;
+        }
+
+        body.dark-theme .list-item {
+            border-bottom-color: #2d3748;
+        }
+
+        body.dark-theme .list-item:hover {
+            background-color: #0f1729;
+        }
+
+        body.dark-theme .legend-item:hover,
+        body.dark-theme .stats-item {
+            background: #0f1729;
+        }
+
+        body.dark-theme .stats-item:hover {
+            background: #1a2332;
+        }
+
+        body.dark-theme .stats-count {
+            background: #0f1729;
+        }
+
+        body.dark-theme .empty-state-title {
+            color: #e0e0e0;
+        }
+
+        /* Theme toggle */
+        .theme-toggle {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            z-index: 999;
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.1) rotate(20deg);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Improved animations */
+        .month-block {
+            animation: fadeInUp 0.5s ease;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .calendar-grid .month-block:nth-child(1) { animation-delay: 0.05s; }
+        .calendar-grid .month-block:nth-child(2) { animation-delay: 0.1s; }
+        .calendar-grid .month-block:nth-child(3) { animation-delay: 0.15s; }
+        .calendar-grid .month-block:nth-child(4) { animation-delay: 0.2s; }
+        .calendar-grid .month-block:nth-child(5) { animation-delay: 0.25s; }
+        .calendar-grid .month-block:nth-child(6) { animation-delay: 0.3s; }
+        .calendar-grid .month-block:nth-child(7) { animation-delay: 0.35s; }
+        .calendar-grid .month-block:nth-child(8) { animation-delay: 0.4s; }
+        .calendar-grid .month-block:nth-child(9) { animation-delay: 0.45s; }
+        .calendar-grid .month-block:nth-child(10) { animation-delay: 0.5s; }
+        .calendar-grid .month-block:nth-child(11) { animation-delay: 0.55s; }
+        .calendar-grid .month-block:nth-child(12) { animation-delay: 0.6s; }
+
+        /* Mobile responsiveness */
+        @media (max-width: 768px) {
+            .calendar-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .legend-grid {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .legend-item {
+                min-width: auto;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .theme-toggle {
+                bottom: 20px;
+                right: 20px;
+                width: 50px;
+                height: 50px;
+            }
+
+            .bitrix-float-button {
+                bottom: 90px;
+                right: 20px;
+                width: 50px;
+                height: 50px;
+                font-size: 1.5rem;
+            }
+
+            .controls {
+                flex-direction: column;
+            }
+
+            .modal,
+            .bitrix-modal {
+                max-width: 90%;
+                padding: 20px;
+            }
+
+            .bitrix-actions {
+                flex-direction: column;
+            }
+
+            .bitrix-actions button {
+                width: 100%;
+            }
+        }
+
+        /* List grouping */
+        .list-group {
+            margin-bottom: 30px;
+        }
+
+        .list-group-header {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #334155;
+            padding: 15px;
+            background: #f8fafc;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        body.dark-theme .list-group-header {
+            background: #0f1729;
+            color: #e0e0e0;
+        }
+
+        .list-group-countries {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .list-group-country-badge {
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            background: white;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        body.dark-theme .list-group-country-badge {
+            background: #1a2332;
+        }
+
+        /* Bitrix24 Integration */
+        .bitrix-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1001;
+            animation: fadeIn 0.3s ease;
+            padding: 20px;
+        }
+
+        .bitrix-modal {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            max-width: 700px;
+            width: 100%;
+            max-height: 85vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            animation: slideUp 0.3s ease;
+        }
+
+        body.dark-theme .bitrix-modal {
+            background: #16213e;
+        }
+
+        .bitrix-float-button {
+            position: fixed;
+            bottom: 100px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+            font-size: 1.8rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            z-index: 998;
+        }
+
+        .bitrix-float-button:hover {
+            transform: scale(1.1) rotate(-10deg);
+            box-shadow: 0 6px 16px rgba(16, 185, 129, 0.6);
+        }
+
+        .bitrix-float-button .badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: #ef4444;
+            color: white;
+            font-size: 0.7rem;
+            font-weight: 600;
+            padding: 3px 7px;
+            border-radius: 10px;
+            min-width: 20px;
+            text-align: center;
+        }
+
+        .bitrix-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        body.dark-theme .bitrix-header {
+            border-bottom-color: #2d3748;
+        }
+
+        .bitrix-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #334155;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        body.dark-theme .bitrix-title {
+            color: #e0e0e0;
+        }
+
+        .bitrix-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .bitrix-input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .bitrix-label {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #475569;
+        }
+
+        body.dark-theme .bitrix-label {
+            color: #94a3b8;
+        }
+
+        .bitrix-input {
+            padding: 10px 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+        }
+
+        body.dark-theme .bitrix-input {
+            background: #0f1729;
+            color: #e0e0e0;
+            border-color: #2d3748;
+        }
+
+        .bitrix-input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .bitrix-textarea {
+            min-height: 100px;
+            resize: vertical;
+            font-family: inherit;
+        }
+
+        .bitrix-upcoming-holidays {
+            background: #f8fafc;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 10px;
+        }
+
+        body.dark-theme .bitrix-upcoming-holidays {
+            background: #0f1729;
+        }
+
+        .bitrix-upcoming-title {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #334155;
+            margin-bottom: 10px;
+        }
+
+        body.dark-theme .bitrix-upcoming-title {
+            color: #e0e0e0;
+        }
+
+        .bitrix-holiday-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px;
+            border-radius: 6px;
+            background: white;
+            margin-bottom: 6px;
+        }
+
+        body.dark-theme .bitrix-holiday-item {
+            background: #1a2332;
+        }
+
+        .bitrix-holiday-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .bitrix-holiday-name {
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        .bitrix-holiday-date {
+            font-size: 0.8rem;
+            color: #64748b;
+        }
+
+        .bitrix-badge {
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .bitrix-badge.warning {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .bitrix-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .bitrix-notification {
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-top: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            animation: slideInRight 0.3s ease;
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .bitrix-notification.success {
+            background: #d1fae5;
+            color: #065f46;
+            border: 1px solid #6ee7b7;
+        }
+
+        .bitrix-notification.error {
+            background: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #fca5a5;
+        }
+
+        .bitrix-notification.info {
+            background: #dbeafe;
+            color: #1e40af;
+            border: 1px solid #93c5fd;
+        }
+
+        body.dark-theme .bitrix-notification.success {
+            background: #064e3b;
+            color: #6ee7b7;
+        }
+
+        body.dark-theme .bitrix-notification.error {
+            background: #7f1d1d;
+            color: #fca5a5;
+        }
+
+        body.dark-theme .bitrix-notification.info {
+            background: #1e3a8a;
+            color: #93c5fd;
+        }
+
+        /* Bitrix24 User Chips */
+        .bitrix-users-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 10px;
+            min-height: 40px;
+            padding: 8px;
+            background: #f8fafc;
+            border-radius: 8px;
+        }
+
+        body.dark-theme .bitrix-users-chips {
+            background: #0f1729;
+        }
+
+        .bitrix-user-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            border-radius: 16px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            transition: all 0.2s ease;
+            animation: chipIn 0.2s ease;
+        }
+
+        @keyframes chipIn {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .bitrix-user-chip:hover {
+            transform: scale(1.05);
+            box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
+        }
+
+        .bitrix-user-chip-close {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.2s ease;
+            color: white;
+        }
+
+        .bitrix-user-chip-close:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.1);
+        }
+
+        .bitrix-users-empty {
+            color: #94a3b8;
+            font-size: 0.85rem;
+            padding: 8px;
+        }
+
+        .bitrix-users-count {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.85rem;
+            color: #64748b;
+            margin-top: 5px;
+        }
+
+        body.dark-theme .bitrix-users-count {
+            color: #94a3b8;
+        }
+
+        .bitrix-input-with-button {
+            display: flex;
+            gap: 8px;
+        }
+
+        .bitrix-input-with-button input {
+            flex: 1;
+        }
+
+        .bitrix-add-button {
+            padding: 10px 16px;
+            background: #10b981;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+        }
+
+        .bitrix-add-button:hover {
+            background: #059669;
+            transform: translateY(-1px);
+        }
+
+        .bitrix-add-button:disabled {
+            background: #cbd5e1;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        body.dark-theme .bitrix-add-button:disabled {
+            background: #475569;
+        }
+
     </style>
 </head>
 <body>
@@ -476,7 +1309,7 @@
         const translations = {
             en: {
                 title: 'Holiday Calendar',
-                subtitle: 'Explore public holidays across 8 countries',
+                subtitle: 'Explore public holidays across 7 countries',
                 selectYear: 'Select year',
                 selectCountries: 'Select Countries',
                 selectAll: '✓ Select All',
@@ -485,13 +1318,39 @@
                 listView: 'List View',
                 searchPlaceholder: 'Search holidays...',
                 close: 'Close',
+                legend: 'Country Legend',
+                statistics: 'Holiday Statistics',
+                totalHolidays: 'Total holidays',
+                days: 'days',
+                emptyStateTitle: 'No countries selected',
+                emptyStateText: 'Please select countries above to view their public holidays',
+                bitrixTitle: 'Bitrix24 Integration',
+                bitrixWebhook: 'Bitrix24 Webhook URL',
+                bitrixWebhookPlaceholder: 'https://your-domain.bitrix24.com/rest/1/xxxxx/',
+                bitrixUsers: 'User IDs (comma-separated)',
+                bitrixUsersPlaceholder: 'e.g., 1, 5, 12',
+                bitrixTaskTitle: 'Task Title Template',
+                bitrixTaskTitlePlaceholder: 'Check prep center operation before {holiday}',
+                bitrixTaskDescription: 'Task Description',
+                bitrixTaskDescriptionPlaceholder: 'Please verify prep center is ready for the upcoming holiday',
+                bitrixUpcoming: 'Upcoming Holidays (next 7 days)',
+                bitrixNoUpcoming: 'No holidays in the next 7 days',
+                bitrixDaysUntil: 'in {days} days',
+                bitrixCreateTasks: 'Create Tasks in Bitrix24',
+                bitrixSaveSettings: 'Save Settings',
+                bitrixTestConnection: 'Test Connection',
+                bitrixTasksCreated: 'Tasks created successfully!',
+                bitrixTasksError: 'Error creating tasks',
+                bitrixConnectionSuccess: 'Connection successful!',
+                bitrixConnectionError: 'Connection failed',
+                bitrixSettingsSaved: 'Settings saved',
                 months: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
                 weekdays: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
                 countryNames: {
                     'DE': 'Germany',
                     'PL': 'Poland',
                     'ES': 'Spain',
-                                       'GB': 'United Kingdom',
+                    'GB': 'United Kingdom',
                     'CN': 'China',
                     'IT': 'Italy',
                     'FR': 'France'
@@ -499,7 +1358,7 @@
             },
             ru: {
                 title: 'Календарь Праздников',
-                subtitle: 'Исследуйте государственные праздники в 8 странах',
+                subtitle: 'Исследуйте государственные праздники в 7 странах',
                 selectYear: 'Выберите год',
                 selectCountries: 'Выбрать страны',
                 selectAll: '✓ Выбрать все',
@@ -508,13 +1367,38 @@
                 listView: 'Список',
                 searchPlaceholder: 'Поиск праздников...',
                 close: 'Закрыть',
+                legend: 'Легенда стран',
+                statistics: 'Статистика праздников',
+                totalHolidays: 'Всего праздников',
+                days: 'дней',
+                emptyStateTitle: 'Страны не выбраны',
+                emptyStateText: 'Пожалуйста, выберите страны выше для просмотра их государственных праздников',
+                bitrixTitle: 'Интеграция с Битрикс24',
+                bitrixWebhook: 'Webhook URL Битрикс24',
+                bitrixWebhookPlaceholder: 'https://ваш-домен.bitrix24.ru/rest/1/xxxxx/',
+                bitrixUsers: 'ID пользователей (через запятую)',
+                bitrixUsersPlaceholder: 'например: 1, 5, 12',
+                bitrixTaskTitle: 'Шаблон названия задачи',
+                bitrixTaskTitlePlaceholder: 'Проверка работы преп-центров перед {holiday}',
+                bitrixTaskDescription: 'Описание задачи',
+                bitrixTaskDescriptionPlaceholder: 'Пожалуйста, проверьте готовность преп-центра к предстоящему празднику',
+                bitrixUpcoming: 'Предстоящие праздники (7 дней)',
+                bitrixNoUpcoming: 'Нет праздников в ближайшие 7 дней',
+                bitrixDaysUntil: 'через {days} дн.',
+                bitrixCreateTasks: 'Создать задачи в Битрикс24',
+                bitrixSaveSettings: 'Сохранить настройки',
+                bitrixTestConnection: 'Проверить соединение',
+                bitrixTasksCreated: 'Задачи успешно созданы!',
+                bitrixTasksError: 'Ошибка при создании задач',
+                bitrixConnectionSuccess: 'Соединение установлено!',
+                bitrixConnectionError: 'Ошибка соединения',
+                bitrixSettingsSaved: 'Настройки сохранены',
                 months: ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'],
                 weekdays: ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'],
                 countryNames: {
                     'DE': 'Германия',
                     'PL': 'Польша',
                     'ES': 'Испания',
-                  
                     'GB': 'Великобритания',
                     'CN': 'Китай',
                     'IT': 'Италия',
@@ -525,12 +1409,13 @@
 
         // Country configuration
         const getCountries = (lang) => [
-            { code: 'DE', name: translations[lang].countryNames['DE'], localName: 'Deutschland', color: '#0077B6' },
-            { code: 'PL', name: translations[lang].countryNames['PL'], localName: 'Polska', color: '#FF0000' },
-            { code: 'ES', name: translations[lang].countryNames['ES'], localName: 'España', color: '#FFC300' },            { code: 'GB', name: translations[lang].countryNames['GB'], localName: 'United Kingdom', color: '#8A2BE2' },
-            { code: 'CN', name: translations[lang].countryNames['CN'], localName: '中国', color: '#FF4500' },
-            { code: 'IT', name: translations[lang].countryNames['IT'], localName: 'Italia', color: '#008000' },
-            { code: 'FR', name: translations[lang].countryNames['FR'], localName: 'France', color: '#4169E1' }
+            { code: 'DE', name: translations[lang].countryNames['DE'], localName: 'Deutschland', color: '#0077B6', flag: '🇩🇪' },
+            { code: 'PL', name: translations[lang].countryNames['PL'], localName: 'Polska', color: '#FF0000', flag: '🇵🇱' },
+            { code: 'ES', name: translations[lang].countryNames['ES'], localName: 'España', color: '#FFC300', flag: '🇪🇸' },
+            { code: 'GB', name: translations[lang].countryNames['GB'], localName: 'United Kingdom', color: '#8A2BE2', flag: '🇬🇧' },
+            { code: 'CN', name: translations[lang].countryNames['CN'], localName: '中国', color: '#FF4500', flag: '🇨🇳' },
+            { code: 'IT', name: translations[lang].countryNames['IT'], localName: 'Italia', color: '#008000', flag: '🇮🇹' },
+            { code: 'FR', name: translations[lang].countryNames['FR'], localName: 'France', color: '#4169E1', flag: '🇫🇷' }
         ];
 
         // Years for the dropdown
@@ -580,6 +1465,9 @@
             addHoliday('GB', 'New Year\'s Day', 'New Year\'s Day', 1, 1);
             addHoliday('CN', 'New Year\'s Day', '元旦', 1, 1);
 
+            // CN - Labour Day
+            addHoliday('CN', 'Labour Day', '劳动节', 5, 1);
+
             // DE, PL, IT, ES
             addHoliday('DE', 'Epiphany', 'Heilige Drei Könige', 1, 6);
             addHoliday('PL', 'Epiphany', 'Trzech Króli', 1, 6);
@@ -606,9 +1494,10 @@
             addHoliday('IT', 'Liberation Day', 'Festa della Liberazione', 4, 25);
             addHoliday('IT', 'Republic Day', 'Festa della Repubblica', 6, 2);
 
-            addHoliday('PL', 'Armed Forces Day', 'Święto Wojska Polskiego', 8, 15);
+            addHoliday('PL', 'Assumption of Mary', 'Wniebowzięcie Najświętszej Maryi Panny', 8, 15);
             addHoliday('DE', 'German Unity Day', 'Tag der Deutschen Einheit', 10, 3);
             addHoliday('ES', 'Hispanic Day', 'Fiesta Nacional de España', 10, 12);
+            addHoliday('DE', 'Reformation Day', 'Reformationstag', 10, 31);
            
           // DE, PL, IT\n, FR
             addHoliday('DE', 'All Saints\' Day', 'Allerheiligen', 11, 1);
@@ -648,15 +1537,17 @@
             addRelativeHoliday('FR', 'Easter Sunday', 'Pâques', easter, 0);
             addRelativeHoliday('ES', 'Easter Sunday', 'Domingo de Resurrección', easter, 0);
 
+            // ES - Maundy Thursday
+            addRelativeHoliday('ES', 'Maundy Thursday', 'Jueves Santo', easter, -3);
+
             // DE, PL, ES, GB, IT, FR
             addRelativeHoliday('DE', 'Good Friday', 'Karfreitag', easter, -2);
             addRelativeHoliday('ES', 'Good Friday', 'Viernes Santo', easter, -2);
             addRelativeHoliday('GB', 'Good Friday', 'Good Friday', easter, -2);
 
-            // DE, PL, ES, GB, IT, FR
+            // DE, PL, GB, IT, FR
             addRelativeHoliday('DE', 'Easter Monday', 'Ostermontag', easter, 1);
             addRelativeHoliday('PL', 'Easter Monday', 'Poniedziałek Wielkanocny', easter, 1);
-            addRelativeHoliday('ES', 'Easter Monday', 'Lunes de Pascua', easter, 1);
             addRelativeHoliday('GB', 'Easter Monday', 'Easter Monday', easter, 1);
             addRelativeHoliday('IT', 'Easter Monday', 'Lunedì dell\'Angelo', easter, 1);
             addRelativeHoliday('FR', 'Easter Monday', 'Lundi de Pâques', easter, 1);
@@ -675,22 +1566,12 @@
             addRelativeHoliday('PL', 'Corpus Christi', 'Boże Ciało', easter, 60);
 
 
-            // FR - Good Friday
-            addRelativeHoliday('FR', 'Good Friday', 'Vendredi Saint', easter, -2);
-            // IT - Good Friday  
-            addRelativeHoliday('IT', 'Good Friday', 'Venerdì Santo', easter, -2);
             // IT - Labour Day (May 1st)
             addHoliday('IT', 'Labour Day', 'Festa del Lavoro', 5, 1);
             // ES - Assumption of Mary
             addHoliday('ES', 'Assumption of Mary', 'Asunción de María', 8, 15);
             // ES - All Saints' Day
             addHoliday('ES', 'All Saints\' Day', 'Día de Todos los Santos', 11, 1);
-            // PL - Good Friday
-            addRelativeHoliday('PL', 'Good Friday', 'Piątek Wielkanocny', easter, -2);
-            // PL - Whit Sunday
-            addRelativeHoliday('PL', 'Whit Sunday', 'Zesłanie Ducha Świętego', easter, 49);
-            // PL - Christmas Eve
-            addHoliday('PL', 'Christmas Eve', 'Wigilia Bożego Narodzenia', 12, 24);
                                 
                      
                                 
@@ -753,6 +1634,7 @@
         // Main App Component
         function HolidayCalendarApp() {
             const [language, setLanguage] = useState('en'); // 'en' or 'ru'
+            const [darkTheme, setDarkTheme] = useState(false);
             const t = translations[language];
             const COUNTRIES = getCountries(language);
 
@@ -762,6 +1644,61 @@
             const [selectedDay, setSelectedDay] = useState(null);
             const [searchQuery, setSearchQuery] = useState('');
             const [showCountryDropdown, setShowCountryDropdown] = useState(false);
+
+            // Bitrix24 integration state
+            const [bitrixWebhook, setBitrixWebhook] = useState(localStorage.getItem('bitrixWebhook') || '');
+            const [bitrixUsers, setBitrixUsers] = useState(() => {
+                try {
+                    const saved = localStorage.getItem('bitrixUsers') || '';
+                    // Validate that saved value contains only numbers and commas
+                    if (saved && /^[\d,\s]+$/.test(saved)) {
+                        return saved.split(',').map(id => id.trim()).filter(id => id && /^\d+$/.test(id));
+                    }
+                    return [];
+                } catch (e) {
+                    return [];
+                }
+            });
+            const [bitrixUserInput, setBitrixUserInput] = useState('');
+            const [bitrixTaskTitle, setBitrixTaskTitle] = useState(localStorage.getItem('bitrixTaskTitle') || t.bitrixTaskTitlePlaceholder);
+            const [bitrixTaskDescription, setBitrixTaskDescription] = useState(localStorage.getItem('bitrixTaskDescription') || t.bitrixTaskDescriptionPlaceholder);
+            const [bitrixNotification, setBitrixNotification] = useState(null);
+            const [showBitrixModal, setShowBitrixModal] = useState(false);
+
+            // Apply dark theme
+            useEffect(() => {
+                if (darkTheme) {
+                    document.body.classList.add('dark-theme');
+                } else {
+                    document.body.classList.remove('dark-theme');
+                }
+            }, [darkTheme]);
+
+            // Clean up invalid localStorage data on mount
+            useEffect(() => {
+                const saved = localStorage.getItem('bitrixUsers') || '';
+                // If saved data contains invalid characters, clear it
+                if (saved && !/^[\d,\s]*$/.test(saved)) {
+                    localStorage.setItem('bitrixUsers', '');
+                }
+            }, []);
+
+            // Auto-save Bitrix24 settings to localStorage
+            useEffect(() => {
+                localStorage.setItem('bitrixWebhook', bitrixWebhook);
+            }, [bitrixWebhook]);
+
+            useEffect(() => {
+                localStorage.setItem('bitrixUsers', bitrixUsers.join(','));
+            }, [bitrixUsers]);
+
+            useEffect(() => {
+                localStorage.setItem('bitrixTaskTitle', bitrixTaskTitle);
+            }, [bitrixTaskTitle]);
+
+            useEffect(() => {
+                localStorage.setItem('bitrixTaskDescription', bitrixTaskDescription);
+            }, [bitrixTaskDescription]);
 
             // Filter holidays by year and selected countries
             const filteredHolidays = useMemo(() => {
@@ -798,6 +1735,140 @@
                 setSelectedCountries([]);
             };
 
+            // Calculate statistics
+            const holidayStats = useMemo(() => {
+                const stats = {};
+                selectedCountries.forEach(code => {
+                    const count = filteredHolidays.filter(h => h.countryCode === code).length;
+                    stats[code] = count;
+                });
+                return stats;
+            }, [filteredHolidays, selectedCountries]);
+
+            const totalHolidays = useMemo(() => {
+                return filteredHolidays.length;
+            }, [filteredHolidays]);
+
+            // Get upcoming holidays (within 7 days)
+            const upcomingHolidays = useMemo(() => {
+                const today = new Date();
+                const sevenDaysLater = new Date(today);
+                sevenDaysLater.setDate(today.getDate() + 7);
+
+                return filteredHolidays.filter(holiday => {
+                    const holidayDate = new Date(holiday.date);
+                    return holidayDate >= today && holidayDate <= sevenDaysLater;
+                }).sort((a, b) => a.date.localeCompare(b.date));
+            }, [filteredHolidays]);
+
+            // Add user to list
+            const addBitrixUser = () => {
+                if (!bitrixUserInput.trim()) return;
+
+                // Parse comma-separated input - only accept numbers
+                const newUsers = bitrixUserInput.split(',')
+                    .map(id => id.trim())
+                    .filter(id => id && /^\d+$/.test(id) && !bitrixUsers.includes(id));
+
+                if (newUsers.length > 0) {
+                    setBitrixUsers([...bitrixUsers, ...newUsers]);
+                    setBitrixUserInput('');
+                }
+            };
+
+            // Remove user from list
+            const removeBitrixUser = (userId) => {
+                setBitrixUsers(bitrixUsers.filter(id => id !== userId));
+            };
+
+            // Test Bitrix24 connection
+            const testBitrixConnection = async () => {
+                if (!bitrixWebhook) {
+                    showBitrixNotification('error', t.bitrixConnectionError);
+                    return;
+                }
+
+                try {
+                    const response = await fetch(`${bitrixWebhook}user.current`, {
+                        method: 'GET'
+                    });
+
+                    if (response.ok) {
+                        showBitrixNotification('success', t.bitrixConnectionSuccess);
+                    } else {
+                        showBitrixNotification('error', t.bitrixConnectionError);
+                    }
+                } catch (error) {
+                    showBitrixNotification('error', t.bitrixConnectionError + ': ' + error.message);
+                }
+            };
+
+            // Create tasks in Bitrix24
+            const createBitrixTasks = async () => {
+                if (!bitrixWebhook || bitrixUsers.length === 0 || upcomingHolidays.length === 0) {
+                    showBitrixNotification('error', t.bitrixTasksError);
+                    return;
+                }
+
+                let tasksCreated = 0;
+                let tasksFailed = 0;
+
+                for (const holiday of upcomingHolidays) {
+                    const country = COUNTRIES.find(c => c.code === holiday.countryCode);
+                    const holidayDate = new Date(holiday.date);
+                    const daysUntil = Math.ceil((holidayDate - new Date()) / (1000 * 60 * 60 * 24));
+
+                    const title = bitrixTaskTitle.replace('{holiday}', `${holiday.name} (${country?.name || holiday.countryCode})`);
+                    const description = bitrixTaskDescription + `\n\n` +
+                        `Праздник: ${holiday.name} (${holiday.localName})\n` +
+                        `Страна: ${country?.flag} ${country?.name}\n` +
+                        `Дата: ${holiday.date}\n` +
+                        `Дней до праздника: ${daysUntil}`;
+
+                    for (const userId of bitrixUsers) {
+                        try {
+                            const taskData = {
+                                fields: {
+                                    TITLE: title,
+                                    DESCRIPTION: description,
+                                    RESPONSIBLE_ID: userId,
+                                    DEADLINE: holiday.date,
+                                    PRIORITY: '2' // High priority
+                                }
+                            };
+
+                            const response = await fetch(`${bitrixWebhook}tasks.task.add`, {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify(taskData)
+                            });
+
+                            if (response.ok) {
+                                tasksCreated++;
+                            } else {
+                                tasksFailed++;
+                            }
+                        } catch (error) {
+                            tasksFailed++;
+                        }
+                    }
+                }
+
+                if (tasksCreated > 0) {
+                    showBitrixNotification('success', `${t.bitrixTasksCreated} (${tasksCreated})`);
+                } else {
+                    showBitrixNotification('error', t.bitrixTasksError);
+                }
+            };
+
+            // Show notification
+            const showBitrixNotification = (type, message) => {
+                setBitrixNotification({ type, message });
+                setTimeout(() => setBitrixNotification(null), 5000);
+            };
+
             return (
                 <div className="app-container">
                     <header className="header">
@@ -808,6 +1879,20 @@
                             <button onClick={() => setLanguage('en')} className={`btn ${language === 'en' ? 'btn-primary' : 'btn-secondary'}`}>English</button>
                         </div>
                     </header>
+
+                    {/* Legend */}
+                    <div className="legend-container">
+                        <div className="legend-title">🎨 {t.legend}</div>
+                        <div className="legend-grid">
+                            {COUNTRIES.map(country => (
+                                <div key={country.code} className="legend-item">
+                                    <span className="legend-flag">{country.flag}</span>
+                                    <div className="legend-color" style={{ backgroundColor: country.color }}></div>
+                                    <span className="legend-name">{country.name}</span>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
 
                     <div className="controls">
                         <div className="select-wrapper">
@@ -832,6 +1917,7 @@
                                     {COUNTRIES.map(country => (
                                         <div key={country.code} className="country-dropdown-item" onClick={() => toggleCountry(country.code)}>
                                             <input type="checkbox" readOnly checked={selectedCountries.includes(country.code)} />
+                                            <span style={{ fontSize: '1.2rem' }}>{country.flag}</span>
                                             <span style={{ color: country.color, fontWeight: 'bold' }}>■</span>
                                             <span>{country.name}</span>
                                         </div>
@@ -844,14 +1930,199 @@
                     <div className="country-chips">
                         {selectedCountries.map(code => {
                             const country = COUNTRIES.find(c => c.code === code);
+                            const count = holidayStats[code] || 0;
                             return (
                                 <div key={code} className="chip" style={{ backgroundColor: country.color, color: 'white' }}>
-                                    <span>{country.name}</span>
+                                    <span>{country.flag} {country.name}</span>
+                                    <span className="chip-counter">({count})</span>
                                     <button className="chip-close" onClick={() => toggleCountry(code)}>×</button>
                                 </div>
                             );
                         })}
                     </div>
+
+                    {/* Statistics */}
+                    {selectedCountries.length > 0 && (
+                        <div className="stats-container">
+                            <div className="stats-title">📊 {t.statistics} {selectedYear}</div>
+                            <div className="stats-total">{totalHolidays} {t.totalHolidays}</div>
+                            <div className="stats-grid">
+                                {selectedCountries.map(code => {
+                                    const country = COUNTRIES.find(c => c.code === code);
+                                    const count = holidayStats[code] || 0;
+                                    return (
+                                        <div key={code} className="stats-item">
+                                            <div className="stats-country">
+                                                <span style={{ fontSize: '1.2rem' }}>{country.flag}</span>
+                                                <span>{country.name}</span>
+                                            </div>
+                                            <div className="stats-count">{count} {t.days}</div>
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        </div>
+                    )}
+
+                    {/* Bitrix24 Floating Button */}
+                    {selectedCountries.length > 0 && (
+                        <button
+                            className="bitrix-float-button"
+                            onClick={() => setShowBitrixModal(true)}
+                            title={t.bitrixTitle}
+                        >
+                            📋
+                            {upcomingHolidays.length > 0 && (
+                                <span className="badge">{upcomingHolidays.length}</span>
+                            )}
+                        </button>
+                    )}
+
+                    {/* Bitrix24 Modal */}
+                    {showBitrixModal && (
+                        <div className="bitrix-modal-overlay" onClick={() => setShowBitrixModal(false)}>
+                            <div className="bitrix-modal" onClick={(e) => e.stopPropagation()}>
+                                <div className="bitrix-header">
+                                    <div className="bitrix-title">
+                                        <span>📋</span> {t.bitrixTitle}
+                                    </div>
+                                    <button className="modal-close" onClick={() => setShowBitrixModal(false)} title={t.close}>×</button>
+                                </div>
+
+                                <div className="bitrix-form">
+                                <div className="bitrix-input-group">
+                                    <label className="bitrix-label">{t.bitrixWebhook}</label>
+                                    <input
+                                        type="text"
+                                        className="bitrix-input"
+                                        placeholder={t.bitrixWebhookPlaceholder}
+                                        value={bitrixWebhook}
+                                        onChange={(e) => setBitrixWebhook(e.target.value)}
+                                    />
+                                </div>
+
+                                <div className="bitrix-input-group">
+                                    <label className="bitrix-label">{t.bitrixUsers} {bitrixUsers.length > 0 && `(${bitrixUsers.length})`}</label>
+                                    <div className="bitrix-input-with-button">
+                                        <input
+                                            type="text"
+                                            className="bitrix-input"
+                                            placeholder={t.bitrixUsersPlaceholder}
+                                            value={bitrixUserInput}
+                                            onChange={(e) => {
+                                                // Only allow numbers, commas and spaces
+                                                const value = e.target.value.replace(/[^\d,\s]/g, '');
+                                                setBitrixUserInput(value);
+                                            }}
+                                            onKeyPress={(e) => e.key === 'Enter' && addBitrixUser()}
+                                        />
+                                        <button
+                                            className="bitrix-add-button"
+                                            onClick={addBitrixUser}
+                                        >
+                                            + Добавить
+                                        </button>
+                                    </div>
+                                    {bitrixUsers.length > 0 && (
+                                        <div className="bitrix-users-chips">
+                                            {bitrixUsers.map((userId) => (
+                                                <div key={userId} className="bitrix-user-chip">
+                                                    <span>👤 {userId}</span>
+                                                    <button
+                                                        className="bitrix-user-chip-close"
+                                                        onClick={() => removeBitrixUser(userId)}
+                                                        title="Удалить пользователя"
+                                                    >
+                                                        ×
+                                                    </button>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    )}
+                                </div>
+
+                                <div className="bitrix-input-group">
+                                    <label className="bitrix-label">{t.bitrixTaskTitle}</label>
+                                    <input
+                                        type="text"
+                                        className="bitrix-input"
+                                        placeholder={t.bitrixTaskTitlePlaceholder}
+                                        value={bitrixTaskTitle}
+                                        onChange={(e) => setBitrixTaskTitle(e.target.value)}
+                                    />
+                                </div>
+
+                                <div className="bitrix-input-group">
+                                    <label className="bitrix-label">{t.bitrixTaskDescription}</label>
+                                    <textarea
+                                        className="bitrix-input bitrix-textarea"
+                                        placeholder={t.bitrixTaskDescriptionPlaceholder}
+                                        value={bitrixTaskDescription}
+                                        onChange={(e) => setBitrixTaskDescription(e.target.value)}
+                                    />
+                                </div>
+
+                                {/* Upcoming Holidays */}
+                                <div className="bitrix-upcoming-holidays">
+                                    <div className="bitrix-upcoming-title">
+                                        ⏰ {t.bitrixUpcoming}
+                                    </div>
+                                    {upcomingHolidays.length > 0 ? (
+                                        upcomingHolidays.map((holiday, index) => {
+                                            const country = COUNTRIES.find(c => c.code === holiday.countryCode);
+                                            const holidayDate = new Date(holiday.date);
+                                            const today = new Date();
+                                            const daysUntil = Math.ceil((holidayDate - today) / (1000 * 60 * 60 * 24));
+
+                                            return (
+                                                <div key={index} className="bitrix-holiday-item">
+                                                    <div className="bitrix-holiday-info">
+                                                        <div className="bitrix-holiday-name">
+                                                            <span style={{ marginRight: '5px' }}>{country?.flag}</span>
+                                                            {holiday.name}
+                                                        </div>
+                                                        <div className="bitrix-holiday-date">
+                                                            {holiday.date} • {country?.name}
+                                                        </div>
+                                                    </div>
+                                                    <div className={`bitrix-badge ${daysUntil <= 3 ? 'warning' : ''}`}>
+                                                        {t.bitrixDaysUntil.replace('{days}', daysUntil)}
+                                                    </div>
+                                                </div>
+                                            );
+                                        })
+                                    ) : (
+                                        <div style={{ color: '#64748b', textAlign: 'center', padding: '10px' }}>
+                                            {t.bitrixNoUpcoming}
+                                        </div>
+                                    )}
+                                </div>
+
+                                {/* Actions */}
+                                <div className="bitrix-actions">
+                                    <button className="btn btn-secondary" onClick={testBitrixConnection}>
+                                        🔌 {t.bitrixTestConnection}
+                                    </button>
+                                    <button
+                                        className="btn btn-primary"
+                                        onClick={createBitrixTasks}
+                                        disabled={upcomingHolidays.length === 0}
+                                    >
+                                        ✅ {t.bitrixCreateTasks} ({upcomingHolidays.length})
+                                    </button>
+                                </div>
+
+                                {/* Notification */}
+                                {bitrixNotification && (
+                                    <div className={`bitrix-notification ${bitrixNotification.type}`}>
+                                        <span>{bitrixNotification.type === 'success' ? '✅' : bitrixNotification.type === 'error' ? '❌' : 'ℹ️'}</span>
+                                        <span>{bitrixNotification.message}</span>
+                                    </div>
+                                )}
+                                </div>
+                            </div>
+                        </div>
+                    )}
 
                     <div className="calendar-container">
                         <div className="view-toggle">
@@ -869,7 +2140,16 @@
                             </button>
                         </div>
 
-                        {viewMode === 'calendar' ? (
+                        {selectedCountries.length === 0 ? (
+                            <div className="empty-state">
+                                <div className="empty-state-icon">📅</div>
+                                <div className="empty-state-title">{t.emptyStateTitle}</div>
+                                <div className="empty-state-text">{t.emptyStateText}</div>
+                                <button className="btn btn-primary" onClick={() => setShowCountryDropdown(true)}>
+                                    {t.selectCountries}
+                                </button>
+                            </div>
+                        ) : viewMode === 'calendar' ? (
                             <CalendarView
                                 year={selectedYear}
                                 holidaysByDate={holidaysByDate}
@@ -885,6 +2165,11 @@
                             />
                         )}
                     </div>
+
+                    {/* Theme Toggle */}
+                    <button className="theme-toggle" onClick={() => setDarkTheme(!darkTheme)} title="Toggle theme">
+                        {darkTheme ? '☀️' : '🌙'}
+                    </button>
 
                     {selectedDay && (
                         <DayModal
@@ -905,6 +2190,13 @@
             const months = t.months;
             const weekdays = t.weekdays;
 
+            const today = new Date();
+            const isToday = (year, month, day) => {
+                return today.getFullYear() === year &&
+                       today.getMonth() === month &&
+                       today.getDate() === day;
+            };
+
             const getCellStyle = (holidays) => {
                 if (!holidays || holidays.length === 0) return {};
                 if (holidays.length === 1) {
@@ -917,7 +2209,7 @@
                 });
                 const uniqueColors = [...new Set(colors)];
                 const stripeSize = 100 / uniqueColors.length;
-                const gradient = uniqueColors.map((color, index) => 
+                const gradient = uniqueColors.map((color, index) =>
                     `${color} ${index * stripeSize}%, ${color} ${(index + 1) * stripeSize}%`
                 ).join(', ');
                 return { background: `linear-gradient(to right, ${gradient})`, color: 'white' };
@@ -944,11 +2236,14 @@
                                         const holidays = holidaysByDate[dateStr] || [];
                                         const hasHoliday = holidays.length > 0;
                                         const style = getCellStyle(holidays);
+                                        const dayOfWeek = new Date(year, monthIndex, day).getDay();
+                                        const isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
+                                        const isTodayCell = isToday(year, monthIndex, day);
 
                                         return (
                                             <div
                                                 key={day}
-                                                className={`day-cell ${hasHoliday ? 'has-holiday' : ''}`}
+                                                className={`day-cell ${hasHoliday ? 'has-holiday' : ''} ${isWeekend ? 'weekend' : ''} ${isTodayCell ? 'today' : ''}`}
                                                 style={style}
                                                 onClick={() => hasHoliday && onDayClick(dateStr)}
                                                 title={hasHoliday ? holidays.map(h => `${h.name} (${(COUNTRIES.find(c => c.code === h.countryCode) || {}).name || h.countryCode})`).join('\n') : ''}
@@ -980,30 +2275,62 @@
                 });
             }, [holidays, searchQuery, COUNTRIES]);
 
+            // Group holidays by date and name
+            const groupedHolidays = useMemo(() => {
+                const groups = {};
+                filteredHolidays.forEach(holiday => {
+                    const key = `${holiday.date}-${holiday.name}`;
+                    if (!groups[key]) {
+                        groups[key] = {
+                            date: holiday.date,
+                            name: holiday.name,
+                            countries: []
+                        };
+                    }
+                    const country = COUNTRIES.find(c => c.code === holiday.countryCode);
+                    if (country) {
+                        groups[key].countries.push({
+                            ...country,
+                            localName: holiday.localName
+                        });
+                    }
+                });
+                return Object.values(groups).sort((a, b) => a.date.localeCompare(b.date));
+            }, [filteredHolidays, COUNTRIES]);
+
             return (
                 <div className="list-view-container">
-                    <input 
-                        type="text" 
-                        className="search-box" 
-                        placeholder={t.searchPlaceholder} 
-                        value={searchQuery} 
-                        onChange={(e) => onSearchChange(e.target.value)} 
+                    <input
+                        type="text"
+                        className="search-box"
+                        placeholder={t.searchPlaceholder}
+                        value={searchQuery}
+                        onChange={(e) => onSearchChange(e.target.value)}
                     />
                     <div>
-                        {filteredHolidays.map((holiday, index) => {
-                            const country = COUNTRIES.find(c => c.code === holiday.countryCode);
-                            return (
-                                <div key={index} className="list-item">
-                                    <div className="list-item-info">
-                                        <div className="holiday-name">{holiday.name}</div>
-                                        <div className="list-item-country" style={{ color: country ? country.color : '#ccc' }}>
-                                            {country ? country.name : holiday.countryCode}
-                                        </div>
-                                    </div>
-                                    <div className="list-item-date">{holiday.date}</div>
+                        {groupedHolidays.map((group, index) => (
+                            <div key={index} className="list-group">
+                                <div className="list-group-header">
+                                    <span>📅 {group.date}</span>
+                                    <span style={{ marginLeft: 'auto', fontWeight: 'normal' }}>{group.name}</span>
                                 </div>
-                            );
-                        })}
+                                <div className="list-group-countries">
+                                    {group.countries.map((country, idx) => (
+                                        <div
+                                            key={idx}
+                                            className="list-group-country-badge"
+                                            style={{ borderLeft: `3px solid ${country.color}` }}
+                                        >
+                                            <span style={{ marginRight: '5px' }}>{country.flag}</span>
+                                            {country.name}
+                                            <span style={{ marginLeft: '5px', color: '#64748b', fontSize: '0.8rem' }}>
+                                                ({country.localName})
+                                            </span>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        ))}
                     </div>
                 </div>
             );
@@ -1018,24 +2345,52 @@
             const day = dateObj.getDate();
             const year = dateObj.getFullYear();
 
+            // Group by holiday name
+            const groupedByName = useMemo(() => {
+                const groups = {};
+                holidays.forEach(holiday => {
+                    if (!groups[holiday.name]) {
+                        groups[holiday.name] = [];
+                    }
+                    const country = COUNTRIES.find(c => c.code === holiday.countryCode);
+                    groups[holiday.name].push({
+                        ...holiday,
+                        country
+                    });
+                });
+                return groups;
+            }, [holidays, COUNTRIES]);
+
             return (
                 <div className="modal-overlay" onClick={onClose}>
                     <div className="modal" onClick={e => e.stopPropagation()}>
                         <div className="modal-header">
-                            <h2 className="modal-title">{month} {day}, {year}</h2>
+                            <h2 className="modal-title">📅 {month} {day}, {year}</h2>
                             <button className="modal-close" onClick={onClose} title={t.close}>×</button>
                         </div>
                         <div>
-                            {holidays.map((holiday, index) => {
-                                const country = COUNTRIES.find(c => c.code === holiday.countryCode);
-                                const countryName = country ? country.name : holiday.countryCode;
-                                return (
-                                    <div key={index} className="holiday-item" style={{ borderLeft: `5px solid ${country ? country.color : '#ccc'}` }}>
-                                        <div className="holiday-name">{holiday.name} ({countryName})</div>
-                                        <div className="holiday-local">{holiday.localName}</div>
+                            {Object.entries(groupedByName).map(([name, items], index) => (
+                                <div key={index} style={{ marginBottom: '20px' }}>
+                                    <div style={{ fontSize: '1.2rem', fontWeight: 'bold', marginBottom: '10px', color: '#667eea' }}>
+                                        🎊 {name}
                                     </div>
-                                );
-                            })}
+                                    {items.map((item, idx) => (
+                                        <div
+                                            key={idx}
+                                            className="holiday-item"
+                                            style={{ borderLeft: `5px solid ${item.country ? item.country.color : '#ccc'}` }}
+                                        >
+                                            <div className="holiday-name">
+                                                <span style={{ fontSize: '1.3rem', marginRight: '8px' }}>
+                                                    {item.country ? item.country.flag : '🏳️'}
+                                                </span>
+                                                {item.country ? item.country.name : item.countryCode}
+                                            </div>
+                                            <div className="holiday-local">└─ {item.localName}</div>
+                                        </div>
+                                    ))}
+                                </div>
+                            ))}
                         </div>
                     </div>
                 </div>
